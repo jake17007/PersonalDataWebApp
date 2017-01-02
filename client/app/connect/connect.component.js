@@ -3,9 +3,9 @@ const angular = require('angular');
 
 const uiRouter = require('angular-ui-router');
 
-import routes from './dashboard.routes';
+import routes from './connect.routes';
 
-export class DashboardComponent {
+export class ConnectComponent {
   /*@ngInject*/
   constructor(Auth) {
     'ngInject';
@@ -13,14 +13,13 @@ export class DashboardComponent {
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
   }
-
 }
 
-export default angular.module('hh7App.dashboard', [uiRouter])
+export default angular.module('hh7App.connect', [uiRouter])
   .config(routes)
-  .component('dashboard', {
-    template: require('./dashboard.html'),
-    controller: DashboardComponent,
-    controllerAs: 'dashboardCtrl'
+  .component('connect', {
+    template: require('./connect.html'),
+    controller: ConnectComponent,
+    controllerAs: 'connectCtrl'
   })
   .name;
