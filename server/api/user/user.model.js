@@ -3,8 +3,9 @@
 import crypto from 'crypto';
 mongoose.Promise = require('bluebird');
 import mongoose, {Schema} from 'mongoose';
+import {ConnectionSchema} from './connection/connection.model'
 
-const authTypes = ['github', 'twitter', 'facebook', 'google'];
+const authTypes = ['facebook', 'google'];
 
 var UserSchema = new Schema({
   name: String,
@@ -37,7 +38,8 @@ var UserSchema = new Schema({
   salt: String,
   facebook: {},
   google: {},
-  github: {}
+  github: {},
+  connections: [ConnectionSchema]
 });
 
 /**

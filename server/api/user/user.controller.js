@@ -21,6 +21,7 @@ function handleError(res, statusCode) {
 /**
  * Get list of users
  * restriction: 'admin'
+ * router.get('/', auth.hasRole('admin'), controller.index);
  */
 export function index(req, res) {
   return User.find({}, '-salt -password').exec()
@@ -32,6 +33,7 @@ export function index(req, res) {
 
 /**
  * Creates a new user
+ * router.post('/', controller.create);
  */
 export function create(req, res) {
   var newUser = new User(req.body);
@@ -49,6 +51,7 @@ export function create(req, res) {
 
 /**
  * Get a single user
+ * router.get('/:id', auth.isAuthenticated(), controller.show);
  */
 export function show(req, res, next) {
   var userId = req.params.id;
@@ -66,6 +69,7 @@ export function show(req, res, next) {
 /**
  * Deletes a user
  * restriction: 'admin'
+ * router.delete('/:id', auth.hasRole('admin'), controller.destroy);
  */
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
@@ -77,6 +81,7 @@ export function destroy(req, res) {
 
 /**
  * Change a users password
+ * router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
  */
 export function changePassword(req, res) {
   var userId = req.user._id;

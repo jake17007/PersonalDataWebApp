@@ -7,11 +7,16 @@ import routes from './connect.routes';
 
 export class ConnectComponent {
   /*@ngInject*/
-  constructor(Auth) {
+  constructor(Auth, $window) {
     'ngInject';
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.window = $window;
+  }
+
+  connectAcct(provider) {
+    this.window.location.href = `/auth/connect/${provider}`;
   }
 }
 

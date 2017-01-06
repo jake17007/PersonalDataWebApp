@@ -48,6 +48,7 @@ var all = {
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'id',
     clientSecret: process.env.FACEBOOK_SECRET || 'secret',
+    scope: 'public_profile, user_friends, email',
     callbackURL: `${process.env.DOMAIN || ''}/auth/facebook/callback`
   },
 
@@ -55,6 +56,12 @@ var all = {
     clientID: process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL: `${process.env.DOMAIN || ''}/auth/google/callback`
+  },
+
+  fitbit: {
+    clientID: process.env.FITBIT_ID || 'id',
+    clientSecret: process.env.FITBIT_SECRET || 'secret',
+    callbackURL: `${process.env.DOMAIN || ''}/auth/connect/fitbit/callback`
   }
 };
 
