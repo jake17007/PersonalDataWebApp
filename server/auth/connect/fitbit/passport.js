@@ -11,6 +11,5 @@ export function setup(User, config) {
   },
   function(req, accessToken, refreshToken, profile, done) {
     upsertConnection('fitbit', req.user._id, accessToken, refreshToken, done);
-
   }));
 }
