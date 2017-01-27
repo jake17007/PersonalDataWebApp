@@ -57,17 +57,3 @@ User.find({}).remove()
       console.log('finished populating users');
     });
   });
-
-ThirdPartySpec.find({}).remove()
-  .then(() => {
-    ThirdPartySpec.create({
-      provider: 'fitbit',
-      requirements: [
-        {
-          name: 'User Info',
-          apiEndpointURL: 'https://api.fitbit.com/1/user/-/profile.json',
-          required: true
-        }
-      ]
-    })
-  })

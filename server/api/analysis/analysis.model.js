@@ -4,8 +4,7 @@ import mongoose from 'mongoose';
 
 var AnalysisSchema = new mongoose.Schema({
   name: String,
-  githubLink: String,
-  requirements: [ThirdPartySpec]
+  githubLink: String
 });
 
 export default mongoose.model('Analysis', AnalysisSchema);
