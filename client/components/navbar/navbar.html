@@ -15,6 +15,12 @@
             <a ui-sref="{{item.state}}">{{item.title}}</a>
         </li>
         <li ng-show="$ctrl.isAdmin()" ui-sref-active="active"><a ui-sref="admin">Admin</a></li>
+        <li ui-sref-active="active">
+          <a ui-sref="developers">Developers</a>
+        </li>
+        <li ng-show="$ctrl.isLoggedIn()" ui-sref-active="active">
+          <a ui-sref="dashboard">Dashboard</a>
+        </li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
