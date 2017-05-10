@@ -20,7 +20,7 @@ export default class SettingsController {
 
   changePassword(form) {
     this.submitted = true;
-
+    console.log(this.Auth);
     if(form.$valid) {
       this.Auth.changePassword(this.user.oldPassword, this.user.newPassword)
         .then(() => {

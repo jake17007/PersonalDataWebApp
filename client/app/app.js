@@ -23,6 +23,10 @@ import admin from './admin';
 import DashboardComponent from './dashboard/dashboard.component';
 import ConnectComponent from './connect/connect.component';
 import DevelopersComponent from './developers/developers.component';
+import CreateNewAppComponent from './createNewApp/createNewApp.component';
+import AppStoreComponent from './appStore/appStore.component';
+import ConnectionDocsComponent from './connectionDocs/connectionDocs.component';
+import UserAppViewComponent from './userAppView/userAppView.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -33,7 +37,7 @@ import socket from '../components/socket/socket.service';
 import './app.scss';
 
 angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, navbar, footer, main, constants, socket, util
+  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, navbar, footer, main, constants, socket, util
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

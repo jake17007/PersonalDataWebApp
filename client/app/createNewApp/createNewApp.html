@@ -1,0 +1,12 @@
+<form class="thing-form">
+  <label>Create Your New App</label>
+  <p class="input-group">
+    <label>App Name</label>
+    <input type="text" class="form-control" placeholder="App Name" ng-model="createNewAppCtrl.newAppName">
+    <label>GithubLink</label>
+    <input type="text" class="form-control" placeholder="Github Link" ng-model="createNewAppCtrl.newAppGithubLink">
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
+    </span>
+  </p>
+</form>

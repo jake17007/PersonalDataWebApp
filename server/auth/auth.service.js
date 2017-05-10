@@ -34,7 +34,7 @@ export function isAuthenticated() {
           if(!user) {
             return res.status(401).end();
           }
-          req.user = user;
+          req.user = user; 
           next();
         })
         .catch(err => next(err));
@@ -82,5 +82,5 @@ export function setTokenCookie(req, res) {
 }
 
 export function saveTokenToUserAcct(req, res) {
-  
+
 }

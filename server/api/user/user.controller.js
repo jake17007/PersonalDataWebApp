@@ -104,6 +104,26 @@ export function changePassword(req, res) {
 }
 
 /**
+ * Add an app to a user's favorites
+ * router.put('/addAppToUsersFavorites/:appId', auth.isAuthenticated(), controller.addAppToUsersFavorites);
+ */
+export function addAppToUsersFavorites(req, res) {
+  var userId = req.user._id;
+  var appToAdd = {id: String(req.params.appId), name: String(req.params.appName)};
+  return User.findById(userId).exec()
+    .then(user => {
+      if (user['favoriteApps'].filter(function(app) {return app.id === appToAdd.id;}).length <= 0) {
+        user['favoriteApps'].push(appToAdd);
+      }
+      return user.save()
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(validationError(res));
+  });
+}
+
+/**
  * Get my info
  */
 export function me(req, res, next) {

@@ -39,7 +39,8 @@ var UserSchema = new Schema({
   facebook: {},
   google: {},
   github: {},
-  connections: [ConnectionSchema]
+  connections: [ConnectionSchema],
+  favoriteApps: [{id: String, name: String}]
 });
 
 /**

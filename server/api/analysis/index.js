@@ -2,6 +2,7 @@
 
 var express = require('express');
 var controller = require('./analysis.controller');
+import * as auth from '../../auth/auth.service';
 
 var router = express.Router();
 
@@ -11,5 +12,7 @@ router.post('/', controller.create);
 router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);
 router.delete('/:id', controller.destroy);
+router.get('/runApp/:appId', auth.isAuthenticated(), controller.runApp)
+
 
 module.exports = router;

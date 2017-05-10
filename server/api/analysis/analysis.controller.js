@@ -115,3 +115,14 @@ export function destroy(req, res) {
     .then(removeEntity(res))
     .catch(handleError(res));
 }
+
+
+// Runs an app on a users data, returns the app's output as JSON
+export function runApp(req, res) {
+  userId = req.user._id;
+  appId = req.params.appId;
+  return Analysis.findById(appId).exec()
+    .then(handleEntityNotFound(res))
+    .then()
+    .catch(handleError(res));
+}

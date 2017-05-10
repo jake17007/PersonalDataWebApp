@@ -6,9 +6,5 @@ export default function($stateProvider) {
     .state('developers', {
       url: '/developers',
       template: '<developers></developers>'
-    })
-    .state('createNewAnalysis', {
-      url: '/developers/createNewAnalysis',
-      template: '<createNewAnalysis></createNewAnalysis>'
     });
 }
