@@ -7,7 +7,8 @@ import mongoose, {Schema} from 'mongoose';
 export var ConnectionSchema = new Schema({
   provider: String,
   accessToken: String,
-  refreshToken: String
+  refreshToken: String,
+  providerUserId: String
 });
 
 /*

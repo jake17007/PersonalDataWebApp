@@ -5,7 +5,7 @@ import config from '../../config/environment';
 //import compose from 'composable-middleware';
 import User from '../../api/user/user.model';
 
-export function upsertConnection(provider, userId, accessToken, refreshToken, callback){
+export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
   var oldConnectionId;
   // Look for an old connection
   User.findOne(
@@ -25,7 +25,8 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, ca
             var newConnection = {
               provider: provider,
               accessToken: accessToken,
-              refreshToken: refreshToken
+              refreshToken: refreshToken,
+              providerUserId: providerUserId
             };
             user.connections.push(newConnection);
             // Save the user
@@ -60,7 +61,8 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, ca
                   var newConnection = {
                     provider: provider,
                     accessToken: accessToken,
-                    refreshToken: refreshToken
+                    refreshToken: refreshToken,
+                    providerUserId: providerUserId
                   };
                   user.connections.push(newConnection);
                   // Save the user

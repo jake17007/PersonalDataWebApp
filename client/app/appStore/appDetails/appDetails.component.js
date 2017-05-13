@@ -3,20 +3,44 @@ const angular = require('angular');
 
 export class AppDetailsComponent {
 
+  requirements = [];
+
   /*@ngInject*/
   constructor($scope, $stateParams, $http) {
     this.message = 'World';
     this.$scope = $scope;
     this.$http = $http;
-    this.appId = $stateParams.appId;
-    this.appName = $stateParams.appName;
+    this.app = $stateParams.app;
+  }
+
+  $onInit() {
+    // Populate this.requirements with names of the third party api's required for this app
+    this.app.thirdPartyApiRequirements.forEach(requirement => {
+      if (requirement.required === true) {
+        console.log(requirement)
+        this.requirements.push(requirement.label);
+      }
+    });
+    console.log(this.requirements);
   }
 
   addAppToUsersFavorites() {
-    console.log('this worked for adding the app');
-    console.log('this is appId ' + this.appId);
-    this.$http.put(`/api/users/addAppToUsersFavorites/${this.appName}/${this.appId}`);
+    this.$http.put(`/api/users/addAppToUsersFavorites/${this.app.name}/${this.app._id}`);
   }
+
+/*
+  // Gets the names of all the third party api's required for this app
+  populateAppRequirements() {
+    this.app.thirdPartyApiRequirements.forEach(requirement => {
+      if (requirement.required === true) {
+        console.log(requirement)
+        this.requirements.push(requirement.label);
+      }
+    });
+    console.log(this.requirements);
+    return ['one', 'two', 'three', 'four'];//this.requirements;
+  }
+  */
 }
 
 export default angular.module('hh7App.appStore.appDetails', [])

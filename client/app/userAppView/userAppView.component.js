@@ -17,11 +17,10 @@ export class UserAppViewComponent {
     this.socket = socket;
   }
 
-  $onInit(socket) {
-    this.$http.get('/api/')
+  $onInit() {
+    this.$http.get(`/api/analyses/runApp/${this.appId}`)
       .then(response => {
-        this.favoriteApps = response.data.favoriteApps;
-        this.socket.syncUpdates()
+        this.appOutput = JSON.stringify(response.data, null, 2);
       });
   }
 }
@@ -30,7 +29,7 @@ export default angular.module('hh7App.userAppView', [uiRouter])
   .config(routes)
   .component('userAppView', {
     template: require('./userAppView.html'),
-    controller: ['$stateParams', UserAppViewComponent],
+    controller: ['$stateParams', '$http', UserAppViewComponent],
     controllerAs: 'userAppViewCtrl'
   })
   .name;

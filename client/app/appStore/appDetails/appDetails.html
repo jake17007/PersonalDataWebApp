@@ -1,4 +1,9 @@
-<div> here are the app details... </div>
-<div> Here is the app name: {{appDetailsCtrl.appName}} </div>
-<div> Here is the app id: {{appDetailsCtrl.appId}} </div>
+<h1> Name: {{appDetailsCtrl.app.name}} </h1>
+<div> App Requirements:</div></br>
+
+<ul ng-repeat="requirement in appDetailsCtrl.requirements">
+  <li>{{requirement}}</li>
+</ul>
+
+
 <a type="button" class="btn btn-primary" ng-click="appDetailsCtrl.addAppToUsersFavorites()">Use App</a>

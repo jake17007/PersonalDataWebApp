@@ -1,5 +1,5 @@
 <div>This is the appStore view.</div>
 <h1 class="page-header">Apps:</h1>
 <ul ng-repeat="app in appStoreCtrl.apps">
-  <li><a href="#" uib-tooltip="{{app.name}}" ng-click="appStoreCtrl.viewAppDetails(app._id, app.name)">{{app.name}}</a></li>
+  <li><a href="#" uib-tooltip="{{app.name}}" ng-click="appStoreCtrl.viewAppDetails(app)">{{app.name}}</a></li>
 </ul>

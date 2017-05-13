@@ -23,8 +23,8 @@ export class AppStoreComponent {
       });
   }
 
-  viewAppDetails(theAppId, theAppName) {
-    this.$state.go('appDetails', {appName: theAppName, appId: theAppId});
+  viewAppDetails(theApp) {
+    this.$state.go('appDetails', {app: theApp});
   }
 }
 

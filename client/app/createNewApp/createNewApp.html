@@ -1,12 +1,18 @@
 <form class="thing-form">
   <label>Create Your New App</label>
-  <p class="input-group">
+
     <label>App Name</label>
     <input type="text" class="form-control" placeholder="App Name" ng-model="createNewAppCtrl.newAppName">
     <label>GithubLink</label>
     <input type="text" class="form-control" placeholder="Github Link" ng-model="createNewAppCtrl.newAppGithubLink">
+
+    <div ng-repeat="requirement in createNewAppCtrl.requirements">
+        <input type="checkbox" ng-model="requirement.required" />
+        <label>{{requirement.label}}</label>
+    </div>
+
     <span class="input-group-btn">
       <button type="submit" class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
     </span>
-  </p>
+
 </form>

@@ -10,6 +10,7 @@ export function setup(User, config) {
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, profile, done) {
-    upsertConnection('fitbit', req.user._id, accessToken, refreshToken, done);
+    console.log(profile.id);
+    upsertConnection('fitbit', req.user._id, accessToken, refreshToken, profile.id, done);
   }));
 }

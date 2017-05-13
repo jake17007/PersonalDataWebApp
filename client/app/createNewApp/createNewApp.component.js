@@ -7,20 +7,28 @@ import routes from './createNewApp.routes';
 
 export class CreateNewAppComponent {
   newAppGithubLink = '';
+  requirements = [];
 
   /*@ngInject*/
-  constructor($http, $scope) {
+  constructor($http) {
     this.message = 'Hello';
     this.$http = $http;
+    this.requirements = [
+      {provider: 'fitbit', required: false, label: 'Fitbit'},
+      {provider: 'facebook', required: false, label: 'Facebook'},
+      {provider: 'twentythreeandme', required: false, label: '23andMe'}
+    ]
   }
 
   createNewAppSubmit() {
     console.log('created');
+    console.log(this.requirements);
     if(this.newAppGithubLink) {
       console.log('yep');
       this.$http.post('/api/analyses', {
         name: this.newAppName,
-        githubLink: this.newAppGithubLink
+        githubLink: this.newAppGithubLink,
+        thirdPartyApiRequirements: this.requirements
       });
       this.newAppName = '';
       this.newAppGithubLink = '';
