@@ -10,7 +10,7 @@ export class CreateNewAppComponent {
   requirements = [];
 
   /*@ngInject*/
-  constructor($http) {
+  constructor($http, $state) {
     this.message = 'Hello';
     this.$http = $http;
     this.requirements = [
@@ -18,6 +18,7 @@ export class CreateNewAppComponent {
       {provider: 'facebook', required: false, label: 'Facebook'},
       {provider: 'twentythreeandme', required: false, label: '23andMe'}
     ]
+    this.$state = $state;
   }
 
   createNewAppSubmit() {
@@ -29,9 +30,10 @@ export class CreateNewAppComponent {
         name: this.newAppName,
         githubLink: this.newAppGithubLink,
         thirdPartyApiRequirements: this.requirements
-      });
-      this.newAppName = '';
-      this.newAppGithubLink = '';
+      }).
+      then(() => {
+        this.$state.go('developers');
+      })
     }
   }
 }

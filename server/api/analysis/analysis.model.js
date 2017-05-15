@@ -2,7 +2,8 @@
 
 import mongoose from 'mongoose';
 
-var AnalysisSchema = new mongoose.Schema({
+export var AnalysisSchema = new mongoose.Schema({
+  ownerId: String,
   name: String,
   githubLink: String,
   thirdPartyApiRequirements: [{provider: String, required: Boolean, label: String}]

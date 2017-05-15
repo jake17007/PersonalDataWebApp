@@ -7,9 +7,25 @@ import routes from './developers.routes';
 
 
 export class DevelopersComponent {
+  myApps;
+
   /*@ngInject*/
-  constructor() {
+  constructor($http, $state) {
     this.message = 'Hello';
+    this.$http = $http;
+    this.$state = $state;
+  }
+
+  $onInit() {
+    this.$http.get('/api/analyses/developers/myOwnedApps')
+      .then(response => {
+        console.log('this is the response: ', response);
+        this.myApps = response.data;
+      });
+  }
+
+  viewAppDetails(theApp) {
+    this.$state.go('appDetails', {app: theApp});
   }
 }
 

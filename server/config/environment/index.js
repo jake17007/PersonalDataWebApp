@@ -62,6 +62,12 @@ var all = {
     clientID: process.env.FITBIT_ID || 'id',
     clientSecret: process.env.FITBIT_SECRET || 'secret',
     callbackURL: `${process.env.DOMAIN || ''}/auth/connect/fitbit/callback`
+  },
+
+  moves: {
+    clientID: process.env.MOVES_ID || 'id',
+    clientSecret: process.env.MOVES_SECRET || 'secret',
+    callbackURL: `${process.env.DOMAIN || ''}/auth/connect/moves/callback`
   }
 };
 

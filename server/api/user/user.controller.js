@@ -109,12 +109,43 @@ export function changePassword(req, res) {
  */
 export function addAppToUsersFavorites(req, res) {
   var userId = req.user._id;
-  var appToAdd = {id: String(req.params.appId), name: String(req.params.appName)};
+  var appIdToAdd = req.params.appId;
+  console.log('this is the userId: ', userId);
+  console.log('this is the appId: ', appIdToAdd);
   return User.findById(userId).exec()
     .then(user => {
-      if (user['favoriteApps'].filter(function(app) {return app.id === appToAdd.id;}).length <= 0) {
-        user['favoriteApps'].push(appToAdd);
+      if (user['favoriteApps'].filter(function(appId) {return appId === appIdToAdd;}).length <= 0) {
+        user['favoriteApps'].push(appIdToAdd);
       }
+      return user.save()
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(validationError(res));
+  });
+}
+
+/**
+ * Add an app to a user's favorites
+ * router.put('/addAppToUsersFavorites/:appId', auth.isAuthenticated(), controller.addAppToUsersFavorites);
+ */
+export function removeAppFromFavorites(req, res) {
+  var userId = req.user._id;
+  var appIdToRemove = req.params.appId;
+  console.log('this is the userId: ', userId);
+  console.log('this is the appId: ', appIdToRemove);
+  return User.findById(userId).exec()
+    .then(user => {
+      console.log(user);
+      return user;
+    })
+    .then(user => {
+      var favoriteAppsWithoutRemoved = user['favoriteApps'].filter(function(appId) {
+        return appId !== appIdToRemove;
+      });
+      console.log('here is the new array: ', favoriteAppsWithoutRemoved);
+      user.favoriteApps = favoriteAppsWithoutRemoved;
+      console.log('here is the new user: ', user);
       return user.save()
       .then(() => {
         res.status(204).end();

@@ -11,6 +11,7 @@ require('./google/passport').setup(User, config);
 
 // -- Connect Authentication
 require('./connect/fitbit/passport').setup(User, config);
+require('./connect/moves/passport').setup(User, config);
 
 var router = express.Router();
 
@@ -22,5 +23,6 @@ router.use('/google', require('./google').default);
 
 // -- Connect Router
 router.use('/connect/fitbit', require('./connect/fitbit').default);
+router.use('/connect/moves', require('./connect/moves').default);
 
 export default router;

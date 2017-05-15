@@ -12,7 +12,8 @@ router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
-router.put('/addAppToUsersFavorites/:appName/:appId', auth.isAuthenticated(), controller.addAppToUsersFavorites);
+router.put('/addAppToUsersFavorites/:appId', auth.isAuthenticated(), controller.addAppToUsersFavorites);
 router.get('/:id', auth.isAuthenticated(), controller.show);
+router.put('/removeAppFromFavorites/:appId', auth.isAuthenticated(), controller.removeAppFromFavorites);
 
 module.exports = router;

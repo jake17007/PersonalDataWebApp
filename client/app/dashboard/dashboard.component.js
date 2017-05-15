@@ -18,22 +18,27 @@ export class DashboardComponent {
     this.$http = $http;
     this.socket = socket;
     this.$state = $state;
-
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('app');
-    });
   }
 
-  $onInit(socket) {
-    this.$http.get('/api/users/me')
-      .then(response => {
-        this.favoriteApps = response.data.favoriteApps;
-        this.socket.syncUpdates()
-      });
+  $onInit() {
+    this.$http.get('api/analyses/user/myFavoriteApps')
+    .then(response => {
+      this.favoriteApps = response.data;
+    });
   }
 
   viewUserAppView(theAppId, theAppName) {
     this.$state.go('userAppView', {appId: theAppId, appName: theAppName});
+  }
+
+  removeFromFavorites(app) {
+    this.$http.put(`api/users/removeAppFromFavorites/${app._id}`)
+    .then(() => {
+      return this.$http.get('api/analyses/user/myFavoriteApps');
+    })
+    .then(response => {
+        this.favoriteApps = response.data;
+    });
   }
 
 }

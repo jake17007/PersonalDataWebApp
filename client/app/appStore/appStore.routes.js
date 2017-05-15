@@ -8,7 +8,7 @@ export default function($stateProvider) {
       template: '<app-store></app-store>'
     })
     .state('appDetails', {
-      url: '/appStore/:appName',
+      url: '/appStore/appDetails',
       template: '<app-details></app-details>',
       params: {app: null}
     });

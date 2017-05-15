@@ -1,0 +1,24 @@
+<div>This is the editOwnedApp view.</div>
+<h1> Name: {{editOwnedAppCtrl.app.name}} </h1>
+
+<form class="thing-form">
+  <label>Edit your app information</label></br>
+
+    <label>Name</label>
+    <input type="text" class="form-control" placeholder="Name of App" ng-model="editOwnedAppCtrl.appWithChanges.name">
+    <label>Github Link</label>
+    <input type="text" class="form-control" placeholder="Github Link" ng-model="editOwnedAppCtrl.appWithChanges.githubLink">
+
+    <div ng-repeat="requirement in editOwnedAppCtrl.appWithChanges.thirdPartyApiRequirements">
+        <input type="checkbox" ng-model="requirement.required" />
+        <label>{{requirement.label}}</label>
+    </div>
+
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.saveChanges()">Save</button>
+    </span>
+    <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.deleteApp()">Delete App</button>
+    </span>
+
+</form>
