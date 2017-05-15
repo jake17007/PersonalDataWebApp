@@ -10,7 +10,6 @@ export function setup(User, config) {
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, profile, done) {
-    console.log(profile.id);
-    //upsertConnection('moves', req.user._id, accessToken, refreshToken, profile.id, done);
+    upsertConnection('moves', req.user._id, accessToken, refreshToken, profile.id, done);
   }));
 }

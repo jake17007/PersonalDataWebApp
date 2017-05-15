@@ -14,6 +14,7 @@ import jsonpatch from 'fast-json-patch';
 import Analysis from './analysis.model';
 import User from '../user/user.model';
 import './dataGetters/fitbit';
+import {upsertConnection} from '../../auth/connect/connect.service';
 
 var Git = require('nodegit');
 var PythonShell = require('python-shell');
@@ -128,10 +129,17 @@ function getUserData(appAndUserData) {
     var client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
     client.get("/profile.json", accessInfo[0].accessToken, accessInfo[0].providerUserId)
     .then(results => {
-      console.log('results: ', results[0].user.dateOfBirth);
+      console.log(results[0].errors);
+      if (results[0].errors && results[0].errors[0].errorType === 'expired_token') {
+        client.refreshAccessToken(accessInfo[0].accessToken, accessInfo[0].refreshToken)
+        .then(results => {
+          console.log(results);
+        })
+      }
       resolve(results[0].user);
     })
     .catch(err => {
+      console.log('Heres the err: ', err);
       reject(err);
     });
   });

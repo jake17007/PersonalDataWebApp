@@ -11,3 +11,7 @@ function getFitbitData(accessToken, userId, callback) {
     callback(results);
   });
 }
+
+function refreshAccessToken(userConnectionInfo) {
+
+}
