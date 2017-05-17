@@ -7,6 +7,7 @@ import routes from './userAppView.routes';
 
 export class UserAppViewComponent {
   appOutput = null;
+  missingConnections = null;
 
   /*@ngInject*/
   constructor($stateParams, $http, socket, $scope, $state) {
@@ -21,6 +22,11 @@ export class UserAppViewComponent {
     this.$http.get(`/api/analyses/runApp/${this.appId}`)
       .then(response => {
         this.appOutput = JSON.stringify(response.data, null, 2);
+      })
+      .catch(err => {
+        if (err.data) {
+          this.missingConnections = err.data;
+        }
       });
   }
 }

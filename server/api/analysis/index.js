@@ -12,7 +12,7 @@ router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);
 router.delete('/:id', controller.destroy);
-router.get('/runApp/:appId', auth.isAuthenticated(), controller.runApp);
+router.get('/runApp/:appId', auth.isAuthenticated(), controller.runAppTwo);
 router.get('/developers/myOwnedApps', auth.isAuthenticated(), controller.getMyOwnedApps);
 router.get('/user/myFavoriteApps', auth.isAuthenticated(), controller.getMyFavoriteApps);
 

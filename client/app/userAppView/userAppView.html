@@ -1,3 +1,9 @@
 <div>this is the userAppView</div>
 <h1>{{userAppViewCtrl.appName}}</h1>
 <div>{{userAppViewCtrl.appOutput}}</div>
+
+
+<div ng-show="userAppViewCtrl.missingConnections">These connections are required for this app and have not been established for you account:</div></br>
+<ul ng-repeat="connection in userAppViewCtrl.missingConnections">
+  <li>{{connection.label}}</li>
+</ul>

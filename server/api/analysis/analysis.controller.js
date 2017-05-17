@@ -13,7 +13,7 @@
 import jsonpatch from 'fast-json-patch';
 import Analysis from './analysis.model';
 import User from '../user/user.model';
-import './dataGetters/fitbit';
+import {aggregateDataGetters} from './dataGetters/aggregateDataGetters';
 import {upsertConnection} from '../../auth/connect/connect.service';
 
 var Git = require('nodegit');
@@ -66,6 +66,7 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
+    console.log('BUBBLED ERROR: ', err);
     res.status(statusCode).send(err);
   };
 }
@@ -92,11 +93,59 @@ function getProviderAccessTokens() {
       });
 
       // Return the app info and required connections info
-      return {app, userRequiredConnectionsInfo};
+      return {app, user, userRequiredConnectionsInfo};
     } catch(e) {
       return e;
     }
 
+  }
+}
+
+function getProviderAccessTokensTwo() {
+  return function(appAndUserData) {
+    var app = appAndUserData[0];
+    var user = appAndUserData[1];
+
+    // Get required providers from the app info
+    var requiredProviders = app.thirdPartyApiRequirements.filter(provider => {
+      return provider.required === true;
+    });
+
+    // Get the connection info (user/connection/connection.model.js) for each required provider
+    var userRequiredConnectionsInfo = [];
+    var missingConnections = [];
+    var providerConnectionInfo;
+    requiredProviders.forEach(requiredProvider => {
+      providerConnectionInfo = null;
+      providerConnectionInfo = user.connections.find(connection => {
+        return connection.provider === requiredProvider.provider;
+      });
+      if (providerConnectionInfo) {
+        userRequiredConnectionsInfo.push(providerConnectionInfo);
+      } else {
+        missingConnections.push(requiredProvider);
+      }
+    });
+
+    // Check for missing connections
+    if (missingConnections.length > 0) {
+      return {missingConnections: missingConnections};
+    } else {
+      return {userRequiredConnectionsInfo: userRequiredConnectionsInfo,
+              user: user,
+              app: app};
+    }
+
+  }
+}
+
+function handleConnectionNotFound(res) {
+  return function(providerAccessResults) {
+    if (providerAccessResults.missingConnections) {
+      res.status(500).send(providerAccessResults.missingConnections)
+      return null;
+    }
+    return providerAccessResults
   }
 }
 
@@ -106,13 +155,13 @@ function buildApp(appAndUserData) {
     console.log('From build app: ', appAndUserData.app)
     Git.Clone(appAndUserData.app.githubLink, 'nodegit')
     .then(repository => {
+      console.log('the build was successful');
       resolve('build successfull');
     })
     .catch(err => {
       reject(err);
     });
   });
-
 }
 
 function getUserData(appAndUserData) {
@@ -142,6 +191,28 @@ function getUserData(appAndUserData) {
       console.log('Heres the err: ', err);
       reject(err);
     });
+  });
+}
+
+function getUserDataTwo(appAndUserData) {
+  return new Promise(function(resolve, reject) {
+    // aggregate the functions needed to retrieve the data from their respective providers' apis
+    aggregateDataGetters(appAndUserData.userRequiredConnectionsInfo, function(err, dataGetters) {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      // Get all the data
+      Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredConnectionsInfo, appAndUserData.user)))
+      .then(result => {
+        console.log('heres the result from getUserDataTwo: ', result);
+        resolve(result);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    });
+
   });
 }
 
@@ -176,13 +247,11 @@ function handleTempFile() {
     // Delete the temporary directory for the app if it exists
     if (fs.existsSync('nodegit')) {
       rimraf('nodegit', function() {
-        console.log('done');
+        console.log('Temporary git repo deleted.');
       });
     } else {
-      console.log('it does not exist');
+      console.log('Temporary git repo does not exist');
     }
-
-    console.log('heres the result', result);
     return result;
   }
 }
@@ -211,7 +280,7 @@ export function create(req, res) {
       console.log('hers the new app: ',newApp )
       return User.findByIdAndUpdate(req.user._id, {$push: {'ownedAppIds': newApp._id}}).exec();
     })
-    .then(seeWhatsHapping())
+    //.then(seeWhatsHapping())
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
@@ -253,7 +322,7 @@ export function destroy(req, res) {
     .then(removeEntity(res))
     .catch(handleError(res));
 }
-
+/*
 // Runs an app on a users data, returns the app's output as JSON
 export function runApp(req, res) {
   var userId = req.user._id;
@@ -281,6 +350,35 @@ export function runApp(req, res) {
     .catch(handleError(res));
 
 }
+*/
+export function runAppTwo(req, res) {
+  return Promise.all([
+    Analysis.findById(req.params.appId).exec(),
+    User.findById(req.user._id).exec()
+  ])
+  .then(getProviderAccessTokensTwo())
+  .then(handleConnectionNotFound(res))
+  .then((appAndUserData) => {
+    return Promise.all([
+      buildApp(appAndUserData),
+      getUserDataTwo(appAndUserData)
+    ]);
+  })
+  .then(result => {
+    console.log('heres the actual result: ', result);
+    result = JSON.stringify(result[1], null, 2);
+    console.log('pretty result: ', result);
+    return result;
+  })
+  /*
+  .then(result => {
+    return runTheAppTwo(result);
+  })
+  */
+  .then(handleTempFile())
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+}
 
 // Gets a list of all the given user's apps they own
 export function getMyOwnedApps(req, res) {
@@ -292,7 +390,7 @@ export function getMyOwnedApps(req, res) {
 // Gets a list of all the given user's apps they own
 export function getMyFavoriteApps(req, res) {
   return User.findById(req.user._id).exec()
-    .then(seeWhatsHapping())
+    //.then(seeWhatsHapping())
     .then(user => {
       return Analysis.find({_id: {$in: user.favoriteApps}}).exec()
     })

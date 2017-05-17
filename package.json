@@ -40,6 +40,7 @@
     "method-override": "^2.3.5",
     "mongoose": "^4.1.2",
     "morgan": "~1.7.0",
+    "moves-api": "0.0.4",
     "nodegit": "^0.18.3",
     "passport": "~0.3.0",
     "passport-facebook": "^2.0.0",

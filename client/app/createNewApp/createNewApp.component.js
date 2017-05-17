@@ -16,7 +16,8 @@ export class CreateNewAppComponent {
     this.requirements = [
       {provider: 'fitbit', required: false, label: 'Fitbit'},
       {provider: 'facebook', required: false, label: 'Facebook'},
-      {provider: 'twentythreeandme', required: false, label: '23andMe'}
+      {provider: 'twentythreeandme', required: false, label: '23andMe'},
+      {provider: 'moves', required: false, label: 'Moves'}
     ]
     this.$state = $state;
   }
