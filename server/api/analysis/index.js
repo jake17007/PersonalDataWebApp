@@ -13,7 +13,9 @@ router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);
 router.delete('/:id', controller.destroy);
 router.get('/runApp/:appId', auth.isAuthenticated(), controller.runAppTwo);
+//router.get('/runApp/:appId', auth.isAuthenticated(), controller.tempTestHtml);
 router.get('/developers/myOwnedApps', auth.isAuthenticated(), controller.getMyOwnedApps);
 router.get('/user/myFavoriteApps', auth.isAuthenticated(), controller.getMyFavoriteApps);
+router.post('/viewJson', auth.isAuthenticated(), controller.viewJson);
 
 module.exports = router;

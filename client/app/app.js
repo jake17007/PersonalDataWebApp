@@ -9,6 +9,7 @@ import 'angular-socket-io';
 
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
+import ngclipboard from 'ngclipboard';
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -28,6 +29,7 @@ import AppStoreComponent from './appStore/appStore.component';
 import ConnectionDocsComponent from './connectionDocs/connectionDocs.component';
 import UserAppViewComponent from './userAppView/userAppView.component';
 import EditOwnedAppComponent from './editOwnedApp/editOwnedApp.component';
+import JsonViewComponent from './jsonView/jsonView.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -35,10 +37,11 @@ import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 
+
 import './app.scss';
 
 angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, navbar, footer, main, constants, socket, util
+  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, navbar, footer, main, constants, socket, util, ngclipboard
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

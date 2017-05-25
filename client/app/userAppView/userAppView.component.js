@@ -10,32 +10,56 @@ export class UserAppViewComponent {
   missingConnections = null;
 
   /*@ngInject*/
-  constructor($stateParams, $http, socket, $scope, $state) {
+  constructor($stateParams, $http, $sce) {
     this.message = 'Hello';
     this.appId = $stateParams.appId;
     this.appName = $stateParams.appName;
     this.$http = $http;
-    this.socket = socket;
+    this.$sce = $sce;
   }
 
   $onInit() {
     this.$http.get(`/api/analyses/runApp/${this.appId}`)
       .then(response => {
-        this.appOutput = JSON.stringify(response.data, null, 2);
+        console.log('this ran mofo');
+        console.log('heres the respnse.data.html: ', response.data.html);
+        this.appOutput = this.$sce.trustAsHtml(response.data.html);
+        console.log('heres the html: ', this.appOutput);
       })
       .catch(err => {
         if (err.data) {
+          console.log(err.data);
           this.missingConnections = err.data;
         }
       });
   }
+
+/*
+  $onInit() {
+    this.$http.get(`/api/analyses/runApp/${this.appId}`)
+      .then(response => {
+        console.log('this ran mofo');
+        console.log('heres the respnse.data: ', response.data);
+        this.appOutput = this.$sce.trustAsHtml(response.data);
+        console.log(this.appOutput);
+        //this.appOutput = this.$sce.trustAsHtml(response.data);
+        //console.log('heres the html: ', this.appOutput);
+      })
+      .catch(err => {
+        if (err.data) {
+          //this.missingConnections = err.data;
+          console.log('err.data: ', err.data);
+        }
+      });
+  }
+*/
 }
 
 export default angular.module('hh7App.userAppView', [uiRouter])
   .config(routes)
   .component('userAppView', {
     template: require('./userAppView.html'),
-    controller: ['$stateParams', '$http', UserAppViewComponent],
+    controller: ['$stateParams', '$http', '$sce', UserAppViewComponent],
     controllerAs: 'userAppViewCtrl'
   })
   .name;

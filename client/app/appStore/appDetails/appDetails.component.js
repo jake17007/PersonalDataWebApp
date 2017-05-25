@@ -5,6 +5,7 @@ export class AppDetailsComponent {
 
   requirements = [];
   userIsOwner = false;
+  userHasRequiredConnections = false;
 
   /*@ngInject*/
   constructor($scope, $stateParams, $http, $state) {
@@ -16,25 +17,50 @@ export class AppDetailsComponent {
   }
 
   $onInit() {
-    // Populate this.requirements with names of the third party api's required for this app
-    this.app.thirdPartyApiRequirements.forEach(requirement => {
-      if (requirement.required === true) {
-        this.requirements.push(requirement.label);
-      }
-    });
-
     // Get the current user and indicated whether this is the owner of the app or not
     this.$http.get('/api/users/me')
-    .then(res => {
-      var userId = res.data._id;
-      if (this.app.ownerId == userId) {
+    .then(user => {
+
+      // Populate the requirements for the app
+      this.app.thirdPartyApiRequirements.forEach(requirement => {
+        if (requirement.required === true) {
+          this.requirements.push(requirement);
+        }
+      });
+
+      // Indicate whether this is the owner of the app or not
+      var user = user.data;
+      if (this.app.ownerId == user._id) {
         this.userIsOwner = true;
       }
+
+      // Add an element to the requirements array indicating whether the user has the given connection
+      this.requirements.forEach(requirement => {
+        var userHasConnection = user.connections.filter(connection => {
+          return connection.provider === requirement.provider;
+        }).length;
+
+        if (userHasConnection) {
+
+        }
+
+      })
     })
+    .catch(function(err){
+      console.log(err);
+    });
+
+
   }
 
   addAppToUsersFavorites() {
-    this.$http.put(`/api/users/addAppToUsersFavorites/${this.app._id}`);
+    this.$http.put(`/api/users/addAppToUsersFavorites/${this.app._id}`)
+    .then(() => {
+      this.$state.go('dashboard');
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   viewEditOwnedApp() {

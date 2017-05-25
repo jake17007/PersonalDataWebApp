@@ -8,6 +8,7 @@ import routes from './dashboard.routes';
 export class DashboardComponent {
 
   favoriteApps = [];
+  myConnections = [];
 
   /*@ngInject*/
   constructor(Auth, $http, socket, $scope, $state) {
@@ -24,7 +25,18 @@ export class DashboardComponent {
     this.$http.get('api/analyses/user/myFavoriteApps')
     .then(response => {
       this.favoriteApps = response.data;
+    })
+    .catch(err => {
+      console.log(err);
     });
+
+    this.$http.get('api/users/me')
+    .then(response => {
+      this.myConnections = response.data.connections;
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   viewUserAppView(theAppId, theAppName) {

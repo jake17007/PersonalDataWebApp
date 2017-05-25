@@ -152,7 +152,7 @@ function handleConnectionNotFound(res) {
 function buildApp(appAndUserData) {
   return new Promise(function(resolve, reject) {
     // Pull the app source code from Github and save it in 'nodegit'
-    console.log('From build app: ', appAndUserData.app)
+    //console.log('From build app: ', appAndUserData.app)
     Git.Clone(appAndUserData.app.githubLink, 'nodegit')
     .then(repository => {
       console.log('the build was successful');
@@ -205,7 +205,7 @@ function getUserDataTwo(appAndUserData) {
       // Get all the data
       Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredConnectionsInfo, appAndUserData.user)))
       .then(result => {
-        console.log('heres the result from getUserDataTwo: ', result);
+        //console.log('heres the result from getUserDataTwo: ', result);
         resolve(result);
       })
       .catch(err => {
@@ -216,26 +216,32 @@ function getUserDataTwo(appAndUserData) {
   });
 }
 
+// userData = [ {<provider_name>: [<objects>]},
+//              {<provider_name>: [<objects>]}, ...]
 function runTheApp(userData) {
   return new Promise(function(resolve, reject) {
     console.log('this ran');
-    console.log('userData: ', userData);
+    //console.log('userData: ', userData);
     var data = userData; // Just get the user object
 
     /**** CALLING PYTHON ****/
     var options = {mode: 'json'};
     var pyshell = new PythonShell('nodegit/pythonTestApp.py', options);
 
-    var output;
+
     pyshell.send(data);
 
+    var output;
     pyshell.on('message', function(pythonOutput) {
-      console.log('it got a message back');
+      console.log('Python output received.');
       output = pythonOutput;
-    })
-    .end(function(err) {
-      if (err) reject(err);
-      console.log('output', output);
+    });
+
+    pyshell.end(function(err) {
+      if (err) {
+        console.log('err: ', err);
+        reject(err);
+      }
       resolve(output);
     });
   });
@@ -364,17 +370,22 @@ export function runAppTwo(req, res) {
       getUserDataTwo(appAndUserData)
     ]);
   })
+  /*
   .then(result => {
     console.log('heres the actual result: ', result);
-    result = JSON.stringify(result[1], null, 2);
+    result = JSON.stringify(result, null, 2);
     console.log('pretty result: ', result);
     return result;
   })
-  /*
-  .then(result => {
-    return runTheAppTwo(result);
-  })
   */
+
+  .then(result => {
+    //console.log('result[1]: ', result[1]);
+    //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
+    //console.log('result[1][1].moves: ', result[1][1].moves);
+    return runTheApp(result[1]);
+    //return {html: '<div>heres some html from the server</div>'}
+  })
   .then(handleTempFile())
   .then(respondWithResult(res))
   .catch(handleError(res));
@@ -396,4 +407,53 @@ export function getMyFavoriteApps(req, res) {
     })
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+export function viewJson(req, res) {
+  return User.findById(req.user._id).exec()
+  .then(user => {
+      return [req.body, user];
+  })
+  .then(getProviderAccessTokensTwo())
+  .then(handleConnectionNotFound(res))
+  .then((appAndUserData) => {
+    return Promise.all([
+      getUserDataTwo(appAndUserData)
+    ]);
+  })
+  /*
+  .then(result => {
+    console.log('heres the actual result: ', result);
+    result = JSON.stringify(result, null, 2);
+    console.log('pretty result: ', result);
+    return result;
+  })
+  */
+
+  .then(result => {
+    return result[0];
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+}
+
+function getHtmlFromFile() {
+  return new Promise(function(resolve, reject) {
+    fs.readFile('server/api/analysis/view.html', 'utf8', (err, theHtml) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(theHtml);
+    })
+  })
+}
+
+export function tempTestHtml(req, res) {
+  return getHtmlFromFile()
+  .then(result => {
+    console.log('result from tempTestHtml: ', result);
+    return result;
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res));
 }

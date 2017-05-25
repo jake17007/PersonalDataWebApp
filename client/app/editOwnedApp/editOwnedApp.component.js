@@ -30,6 +30,10 @@ export class EditOwnedAppComponent {
     });
   }
 
+  viewJson() {
+    this.$state.go('jsonView', {app: this.appWithChanges});
+  }
+
 }
 
 export default angular.module('hh7App.editOwnedApp', [uiRouter])

@@ -6,6 +6,7 @@ export var AnalysisSchema = new mongoose.Schema({
   ownerId: String,
   name: String,
   githubLink: String,
+  description: String,
   thirdPartyApiRequirements: [{provider: String, required: Boolean, label: String}]
 });
 

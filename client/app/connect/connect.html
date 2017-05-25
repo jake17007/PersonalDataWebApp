@@ -1,63 +1,88 @@
-<h1>{{ connectCtrl.getCurrentUser().name }}'s Connections</h1>
-<ul>
-  <li>
-    Facebook
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Fitbit
-    <a type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('fitbit')">Connect</a>
-  </li>
-  <li>
-    Moves
-    <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
-  </li>
-  <li>
-    Apple Health
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Automatic
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Eventbrite
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Foursquare
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Google Calendar
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Google Plus
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Instagram
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Jawbone
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    YouTube
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Twitter
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    Uber
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-  <li>
-    RescueTime
-    <button type="button" class="btn btn-secondary">Connect</button>
-  </li>
-</ul>
+<div class="container">
+  <div class="row">
+    <h1 class="col-md-6 col-md-offset-3">My Connections</h1>
+  </div>
+  <div class="row">
+    <div class="list-group col-md-6 col-md-offset-3">
+      <div class="row list-group-item">
+        <div class="col-md-9">
+          Facebook
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-secondary">Connect</button>
+        </div>
+      </div>
+      <div class="row list-group-item">
+        <div class="col-md-9">
+          Fitbit
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('fitbit')">Connect</button>
+        </div>
+      </div>
+      <div class="row list-group-item">
+        <div class="col-md-9">
+          Moves
+        </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
+        </div>
+      </div>
+      <!--
+
+      <li class="list-group-item">
+        Moves
+        <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Apple Health
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Automatic
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Eventbrite
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Foursquare
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Google Calendar
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Google Plus
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Instagram
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Jawbone
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        YouTube
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Twitter
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        Uber
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+      <li class="list-group-item">
+        RescueTime
+        <button type="button" class="btn btn-secondary">Connect</button>
+      </li>
+    -->
+    </div>
+  </div>
+</div>

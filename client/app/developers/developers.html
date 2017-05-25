@@ -1,10 +1,12 @@
-<div>This is the developers view.</div>
+<div class="container">
 
-<h3>My Apps</h3>
-<ul class="list-group-item" ng-repeat="app in developersCtrl.myApps">
-  <li><a href="#" ng-click="developersCtrl.viewAppDetails(app)">{{app.name}}</a></li>
-</ul>
+  <div class="col-md-8 col-md-offset-2">
+    <h3>My Apps</h3>
+    <ul class="list-group" ng-repeat="app in developersCtrl.myApps">
+      <li class="list-group-item"><a href="#" ng-click="developersCtrl.viewAppDetails(app)">{{app.name}}</a></li>
+    </ul>
 
-<a type="button" class="btn btn-primary" ui-sref="createNewApp">Create a New App</a>
-</br>
-<a type="button" class="btn btn-primary" ui-sref="connectionDocs">Connection Documentation</a>
+    <a type="button" class="btn btn-primary" ui-sref="createNewApp">Create a New App</a>
+    <a type="button" class="btn btn-primary" ui-sref="connectionDocs">Connection Documentation</a>
+  </div>
+</div>

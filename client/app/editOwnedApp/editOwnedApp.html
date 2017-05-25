@@ -1,24 +1,59 @@
-<div>This is the editOwnedApp view.</div>
-<h1> Name: {{editOwnedAppCtrl.app.name}} </h1>
+  <div class="container">
 
-<form class="thing-form">
-  <label>Edit your app information</label></br>
+    <div class="col-xs-12 col-md-8 col-md-offset-2">
+      <h1 class="page-header">Edit App: {{editOwnedAppCtrl.appUnchanged.name}}</h1>
+      <div class="row">
+        <div class="col-xs-12"
+          <form>
 
-    <label>Name</label>
-    <input type="text" class="form-control" placeholder="Name of App" ng-model="editOwnedAppCtrl.appWithChanges.name">
-    <label>Github Link</label>
-    <input type="text" class="form-control" placeholder="Github Link" ng-model="editOwnedAppCtrl.appWithChanges.githubLink">
+            <div class="form-group">
+              <label for="appname">Name</label>
+              <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="editOwnedAppCtrl.appWithChanges.name">
+            </div>
 
-    <div ng-repeat="requirement in editOwnedAppCtrl.appWithChanges.thirdPartyApiRequirements">
-        <input type="checkbox" ng-model="requirement.required" />
-        <label>{{requirement.label}}</label>
+            <div class="form-group">
+              <label for="githublink">Link to Github Repository</label>
+              <input type="text" class="form-control" id="githublink" placeholder='Example: "https://github.com/username/repo.git"' ng-model="editOwnedAppCtrl.appWithChanges.githubLink"/>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea type="text" class="form-control" id="description" ng-model="editOwnedAppCtrl.appWithChanges.description" placeholder='Example: "Shows correlations between how much you work and how many dates you go on."'></textarea>
+            </div>
+
+
+
+
+                <h4 class="page-header"> Connection Data Requirements </h4>
+
+                <div ng-repeat="requirement in editOwnedAppCtrl.appWithChanges.thirdPartyApiRequirements | orderBy:'label'">
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <input type="checkbox" class="pull-right" id="{{requirement.label}}" ng-model="requirement.required" />
+                      <label for="{{requirement.label}}" class="pull-left">{{requirement.label}}</label>
+                    </div>
+                  </div>
+                </div>
+
+
+
+            <div class="footer">
+
+              <div class="pull-left">
+                <button type="submit" class="btn btn-danger" ng-click="editOwnedAppCtrl.deleteApp()">Delete App</button>
+              </div>
+
+
+              <div class="pull-right">
+                <button type="submit" class="btn btn-default" ng-click="editOwnedAppCtrl.viewJson()">View JSON</button>
+                <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
+                <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.saveChanges()">Save</button>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+      </div>
     </div>
-
-    <span class="input-group-btn">
-      <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.saveChanges()">Save</button>
-    </span>
-    <span class="input-group-btn">
-      <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.deleteApp()">Delete App</button>
-    </span>
-
-</form>
+  </div>

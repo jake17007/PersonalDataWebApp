@@ -35,7 +35,7 @@ export function getMovesData(userRequiredConnectionsInfo, user) {
       })
 
       // Get the data from the provider
-      moves.getStoryline({ from: "20000101", to: "20171231", trackPoints: false}, function(err, result) {
+      moves.getStoryline({ from: "20170501", to: "20170518", trackPoints: false}, function(err, result) {
         if (err) {
           //console.log('Moves getProfile err: ', err);
           reject(err);

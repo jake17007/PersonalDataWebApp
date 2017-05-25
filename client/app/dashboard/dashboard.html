@@ -1,15 +1,73 @@
-<h1>{{ dashboardCtrl.getCurrentUser().name }}'s Dashboard</h1>
-<h3>Connect</h3>
-<div>
-  Facebook
-  <button type="button" class="btn btn-secondary">Connect</button>
-  Fitbit
-  <button type="button" class="btn btn-secondary">Connect</button>
-  Moves
-  <button type="button" class="btn btn-secondary">Connect</button>
-  <a type="button" class="btn btn-primary" ui-sref="connect">More</a>
-</div>
 
-<ul class="list-group-item" ng-repeat="app in dashboardCtrl.favoriteApps">
-  <li><a href="#" ng-click="dashboardCtrl.viewUserAppView(app._id, app.name)">{{app.name}}</a><button type="button" class="close" ng-click="dashboardCtrl.removeFromFavorites(app)">&times;</button>
-</ul>
+<div class="container">
+
+  <h1 class="page-header">My Dashboard</h1>
+
+  <div class="col-md-6">
+    <div class="col-md-12">
+
+        <h3>
+          My Favorite Apps
+          <a type="button" class="btn btn-primary pull-right" ui-sref="appStore">
+            More Apps
+          </a>
+        </h3>
+
+
+
+        <ul class="list-group" ng-repeat="app in dashboardCtrl.favoriteApps">
+          <li class="list-group-item">
+            <a href="#" ng-click="dashboardCtrl.viewUserAppView(app._id, app.name)">
+              {{app.name}}
+            </a>
+            <button type="button" class="close" ng-click="dashboardCtrl.removeFromFavorites(app)" uib-tooltip="Remove from favorites" tooltip-placement="top-right">
+              &times;
+            </button>
+          </li>
+        </ul>
+
+    </div>
+  </div>
+
+
+  <div class="col-md-6">
+    <div class="col-md-12">
+
+        <h3>
+          My Connections
+          <a type="button" class="btn btn-primary pull-right" ui-sref="connect">
+            Add Connections
+          </a>
+        </h3>
+
+        <!--
+        Facebook
+        <button type="button" class="btn btn-secondary">Connect</button>
+        Fitbit
+        <button type="button" class="btn btn-secondary">Connect</button>
+        Moves
+        <button type="button" class="btn btn-secondary">Connect</button>
+      -->
+
+
+        <ul class="list-group" ng-repeat="connection in dashboardCtrl.myConnections">
+          <li class="list-group-item">{{connection.provider}}</li>
+        </ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>

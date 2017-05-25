@@ -59,9 +59,11 @@ export function getFitbitData(userRequiredConnectionsInfo, user) {
       var connectInfo = userRequiredConnectionsInfo.filter(connection => {
         return connection.provider === 'fitbit';
       })[0];
+
+      console.log('connectInfo.accessToken: ', connectInfo.accessToken);
       // Get the data from the provider
       client.get("/profile.json", connectInfo.accessToken, connectInfo.userId)
-      .then(handleExpiredAccessToken(user))
+      //.then(handleExpiredAccessToken(user))
       .then(result => {
         //console.log('heres the result after handling the response: ', result);
         resolve({fitbit: result});
