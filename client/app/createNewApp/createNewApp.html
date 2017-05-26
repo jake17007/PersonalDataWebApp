@@ -8,17 +8,17 @@
 
           <div class="form-group">
             <label for="appname">App Name</label>
-            <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="createNewAppCtrl.newAppName">
+            <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="createNewAppCtrl.newApp.name">
           </div>
 
           <div class="form-group">
             <label for="githublink">Link to Github Repository</label>
-            <input type="text" class="form-control" id="githublink" placeholder='Example: "https://github.com/username/repo.git"' ng-model="createNewAppCtrl.newAppGithubLink"/>
+            <input type="text" class="form-control" id="githublink" placeholder='Example: "https://github.com/username/repo.git"' ng-model="createNewAppCtrl.newApp.githubLink"/>
           </div>
 
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea type="text" class="form-control" id="description" ng-model="createNewAppCtrl.description" placeholder='Example: "Shows correlations between how often you work out and how often you get dates."'></textarea>
+            <textarea type="text" class="form-control" id="description" ng-model="createNewAppCtrl.newApp.description" placeholder='Example: "Shows correlations between how often you work out and how often you get dates."'></textarea>
           </div>
 
 
@@ -83,7 +83,7 @@
                 <div ng-repeat="api in createNewAppCtrl.thirdPartyApis | orderBy:'label'">
                   <div class="list-group-item">
                     <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="createNewAppCtrl.toggleDropdown(api)"></a>{{api.label}}
-                    <input type="checkbox" class="pull-right" ng-model="api.required" ng-checked="createNewAppCtrl.childrenChecked(api)" ng-click="createNewAppCtrl.checkOrUncheckChildren(api)"/>
+                    <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="createNewAppCtrl.checkOrUncheckChildren(api)"/>
                   </div>
 
                   <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
@@ -92,7 +92,7 @@
                         <a href="{{endpoint.documentationLink}}" target="_blank">
                           {{endpoint.label}}
                         </a>
-                        <input type="checkbox" class="pull-right" ng-model="endpoint.required"/>
+                        <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="createNewAppCtrl.checkOrUncheckParent(api)"/>
                       </div>
                     </div>
                   </div>
@@ -140,7 +140,7 @@
 
           <div class="form-group row pull-right">
             <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
-            <button type="submit" class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
+            <button class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
           </div>
 
         </form>

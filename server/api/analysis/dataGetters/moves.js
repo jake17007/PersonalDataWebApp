@@ -16,6 +16,18 @@ function getFitbitData(accessToken, userId, callback) {
 }
 */
 
+export function getMovesDataGettersByEndpoints(endpoints) {
+  dataGetters = [];
+  endpoints.forEach(endpoint => {
+
+
+    dataGetters.push(
+
+    );
+  });
+  return dataGetters;
+}
+
 export function getMovesData(userRequiredConnectionsInfo, user) {
   return new Promise(function(resolve, reject) {
     try {

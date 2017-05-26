@@ -71,59 +71,25 @@ function handleError(res, statusCode) {
   };
 }
 
-// Gets all the access tokens for the providers required for the app
-function getProviderAccessTokens() {
-  return function(appAndUserData) {
-    try {
-      var app = appAndUserData[0];
-      var user = appAndUserData[1];
-
-      // Get required providers from the app info
-      var requiredProviders = app.thirdPartyApiRequirements.filter(provider => {
-        return provider.required === true;
-      });
-
-      // Get the connection info (user/connection/connection.model.js) for each required provider
-      var userRequiredConnectionsInfo = [];
-      requiredProviders.forEach(requiredProvider => {
-        var connectionInfo = user.connections.find(connection => {
-          return connection.provider === requiredProvider.provider;
-        });
-        userRequiredConnectionsInfo.push(connectionInfo);
-      });
-
-      // Return the app info and required connections info
-      return {app, user, userRequiredConnectionsInfo};
-    } catch(e) {
-      return e;
-    }
-
-  }
-}
-
-function getProviderAccessTokensTwo() {
+function getProviderAccessInfo() {
   return function(appAndUserData) {
     var app = appAndUserData[0];
     var user = appAndUserData[1];
-
-    // Get required providers from the app info
-    var requiredProviders = app.thirdPartyApiRequirements.filter(provider => {
-      return provider.required === true;
-    });
+    var requiredApis = app.thirdPartyApiRequirements;
 
     // Get the connection info (user/connection/connection.model.js) for each required provider
-    var userRequiredConnectionsInfo = [];
+    var userRequiredApiInfo = [];
     var missingConnections = [];
     var providerConnectionInfo;
-    requiredProviders.forEach(requiredProvider => {
+    requiredApis.forEach(requiredApi => {
       providerConnectionInfo = null;
       providerConnectionInfo = user.connections.find(connection => {
-        return connection.provider === requiredProvider.provider;
+        return connection.provider === requiredApi.provider;
       });
       if (providerConnectionInfo) {
-        userRequiredConnectionsInfo.push(providerConnectionInfo);
+        userRequiredApiInfo.push(providerConnectionInfo);
       } else {
-        missingConnections.push(requiredProvider);
+        missingConnections.push(requiredApi);
       }
     });
 
@@ -131,21 +97,20 @@ function getProviderAccessTokensTwo() {
     if (missingConnections.length > 0) {
       return {missingConnections: missingConnections};
     } else {
-      return {userRequiredConnectionsInfo: userRequiredConnectionsInfo,
+      return {userRequiredApiInfo: userRequiredApiInfo,
               user: user,
               app: app};
     }
-
   }
 }
 
 function handleConnectionNotFound(res) {
-  return function(providerAccessResults) {
-    if (providerAccessResults.missingConnections) {
-      res.status(500).send(providerAccessResults.missingConnections)
+  return function(providerAccessInfoResults) {
+    if (providerAccessInfoResults.missingConnections) {
+      res.status(500).send(providerAccessInfoResults.missingConnections)
       return null;
     }
-    return providerAccessResults
+    return providerAccessInfoResults
   }
 }
 
@@ -166,46 +131,16 @@ function buildApp(appAndUserData) {
 
 function getUserData(appAndUserData) {
   return new Promise(function(resolve, reject) {
-    console.log('From get user data: ', appAndUserData.userRequiredConnectionsInfo);
-
-    // Get only required conections info
-    var accessInfo = appAndUserData.userRequiredConnectionsInfo.filter(connection => {
-      return connection.provider === 'fitbit';
-    })
-
-    // Get the fitbit data (this will eventually be separated into serveral calls to all the required providers)
-    var FitbitApiClient = require('fitbit-node');
-    var client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
-    client.get("/profile.json", accessInfo[0].accessToken, accessInfo[0].providerUserId)
-    .then(results => {
-      console.log(results[0].errors);
-      if (results[0].errors && results[0].errors[0].errorType === 'expired_token') {
-        client.refreshAccessToken(accessInfo[0].accessToken, accessInfo[0].refreshToken)
-        .then(results => {
-          console.log(results);
-        })
-      }
-      resolve(results[0].user);
-    })
-    .catch(err => {
-      console.log('Heres the err: ', err);
-      reject(err);
-    });
-  });
-}
-
-function getUserDataTwo(appAndUserData) {
-  return new Promise(function(resolve, reject) {
     // aggregate the functions needed to retrieve the data from their respective providers' apis
-    aggregateDataGetters(appAndUserData.userRequiredConnectionsInfo, function(err, dataGetters) {
+    aggregateDataGetters(appAndUserData.app, function(err, dataGetters) {
       if (err) {
         console.log(err);
         reject(err);
       }
       // Get all the data
-      Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredConnectionsInfo, appAndUserData.user)))
+      Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredApiInfo, appAndUserData.user)))
       .then(result => {
-        //console.log('heres the result from getUserDataTwo: ', result);
+        //console.log('heres the result from getUserData: ', result);
         resolve(result);
       })
       .catch(err => {
@@ -282,8 +217,6 @@ export function create(req, res) {
   req.body['ownerId'] = req.user._id;
   return Analysis.create(req.body)
     .then(newApp => {
-      console.log('userid: ',req.user._id);
-      console.log('hers the new app: ',newApp )
       return User.findByIdAndUpdate(req.user._id, {$push: {'ownedAppIds': newApp._id}}).exec();
     })
     //.then(seeWhatsHapping())
@@ -328,57 +261,25 @@ export function destroy(req, res) {
     .then(removeEntity(res))
     .catch(handleError(res));
 }
-/*
-// Runs an app on a users data, returns the app's output as JSON
-export function runApp(req, res) {
-  var userId = req.user._id;
-  var appId = req.params.appId;
-  // Get app info and user info
-  return Promise.all([
-      Analysis.findById(appId).exec(),
-      User.findById(userId).exec()
-    ])
-    // Get access tokens for providers required by the app
-    .then(getProviderAccessTokens())
-    // Get the data from the providers and build the app
-    .then((appAndUserData) => {
-      return Promise.all([
-        buildApp(appAndUserData),
-        getUserData(appAndUserData)
-      ]);
-    })
-    .then(function(userData) {
-      return runTheApp(userData);
-    })
-    .then(handleTempFile())
-    .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
 
-}
-*/
-export function runAppTwo(req, res) {
+export function runApp(req, res) {
   return Promise.all([
     Analysis.findById(req.params.appId).exec(),
     User.findById(req.user._id).exec()
   ])
-  .then(getProviderAccessTokensTwo())
+  .then(getProviderAccessInfo())
   .then(handleConnectionNotFound(res))
   .then((appAndUserData) => {
     return Promise.all([
       buildApp(appAndUserData),
-      getUserDataTwo(appAndUserData)
+      getUserData(appAndUserData)
     ]);
   })
-  /*
-  .then(result => {
-    console.log('heres the actual result: ', result);
-    result = JSON.stringify(result, null, 2);
-    console.log('pretty result: ', result);
-    return result;
+  .then(res => {
+    console.log('Heres your current results: ', res);
+    return res;
   })
-  */
-
+  /*
   .then(result => {
     //console.log('result[1]: ', result[1]);
     //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
@@ -387,6 +288,7 @@ export function runAppTwo(req, res) {
     //return {html: '<div>heres some html from the server</div>'}
   })
   .then(handleTempFile())
+  */
   .then(respondWithResult(res))
   .catch(handleError(res));
 }
@@ -414,22 +316,13 @@ export function viewJson(req, res) {
   .then(user => {
       return [req.body, user];
   })
-  .then(getProviderAccessTokensTwo())
+  .then(getProviderAccessInfo())
   .then(handleConnectionNotFound(res))
   .then((appAndUserData) => {
     return Promise.all([
-      getUserDataTwo(appAndUserData)
+      getUserData(appAndUserData)
     ]);
   })
-  /*
-  .then(result => {
-    console.log('heres the actual result: ', result);
-    result = JSON.stringify(result, null, 2);
-    console.log('pretty result: ', result);
-    return result;
-  })
-  */
-
   .then(result => {
     return result[0];
   })

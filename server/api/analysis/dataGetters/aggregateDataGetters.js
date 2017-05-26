@@ -1,24 +1,30 @@
 'use strict';
 
-import {getFitbitData} from './fitbit';
-import {getMovesData} from './moves';
+import {getFibitDataGettersByEndpoints} from './fitbit';
+import {getMovesDataGettersByEndpoints} from './moves';
 /*
 import * from './facebook';
 import * from './moves';
 import * from './twothreeandme';
 */
-function fetchDataGetterByProvider(provider) {
-  if (provider === 'fitbit') return getFitbitData;
-  if (provider === 'facebook') return getFacebookData;
-  if (provider === 'moves') return getMovesData;
+function fetchDataGettersByProvider(providerInfo) {
+  if (providerInfo.provider === 'fitbit') {
+    return getFitbitDataGettersByEndpoints(providerInfo.endpoints);
+  }
+  if (providerInfo.provider === 'moves') {
+    return getMovesDataGettersByEndpoints(providerInfo.endpoints);
+  }
   if (provider === 'twothreeandme') return getTwothreeandmeData;
 }
 
-export function aggregateDataGetters(userRequiredConnectionsInfo, callback) {
+export function aggregateDataGetters(app, callback) {
   try {
     var dataGetters = [];
-    userRequiredConnectionsInfo.forEach(connection => {
-      dataGetters.push(fetchDataGetterByProvider(connection.provider));
+    app.thirdPartyApiRequirements.forEach(providerInfo => {
+      dataGetters.push.apply( // extends the dataGetter array w/ more dataGetters
+        dataGetters,
+        fetchDataGettersByProvider(providerInfo)
+      );
     });
     console.log('dataGetters: ', dataGetters);
   } catch(err) {

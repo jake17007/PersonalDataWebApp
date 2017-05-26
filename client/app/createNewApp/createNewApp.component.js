@@ -6,17 +6,12 @@ const uiRouter = require('angular-ui-router');
 import routes from './createNewApp.routes';
 
 export class CreateNewAppComponent {
-  newAppGithubLink = '';
-  description = '';
-  requirements = [];
   newApp = {
       name: null,
       githubLink: null,
-      shortDescription: null,
-      longDescription: null,
-      thirdPartyApiRequirements: null
+      description: null,
+      thirdPartyApiRequirements: []
   };
-
 
   /*@ngInject*/
   constructor($http, $state) {
@@ -42,38 +37,73 @@ export class CreateNewAppComponent {
   }
 
   createNewAppSubmit() {
-    this.$http.post('/api/analyses', {
-      name: this.newAppName,
-      githubLink: this.newAppGithubLink,
-      description: this.description,
-      thirdPartyApiRequirements: this.requirements
-    }).
+
+    // Format the requirements and store to the newApp
+    this.thirdPartyApis.forEach(provider => {
+      if (provider.required) {
+
+        // The provider info
+        var requiredProvider = {
+          provider: provider.provider,
+          label: provider.label,
+          endpoints: []
+        };
+
+        // The endpoints info
+        provider.endpoints.forEach(endpoint => {
+          if (endpoint.required) {
+            var requiredEndpoint = {
+              name: endpoint.name,
+              label: endpoint.label,
+              requiredScopes: endpoint.requiredScopes
+            };
+
+            requiredProvider.endpoints.push(requiredEndpoint);
+          }
+        });
+
+        this.newApp.thirdPartyApiRequirements.push(requiredProvider)
+
+      }
+    });
+
+    // Send it off to the server to be created
+    this.$http.post('/api/analyses', this.newApp).
     then(() => {
       this.$state.go('developers');
     })
-
   }
 
   toggleDropdown(element) {
     element.collapsed = !element.collapsed;
   }
-
-  childrenChecked(requirement) {
-    if (requirement.endpoints.filter(endpoint => {
+/*
+  childrenChecked(api) {
+    if (api.endpoints.filter(endpoint => {
       return endpoint.required === true;
     }).length > 0) {
       return true;
     }
     return false;
   }
+*/
+  checkOrUncheckParent(api) {
+    if (api.endpoints.filter(endpoint => {
+      return endpoint.required === true;
+    }).length > 0) {
+      api.required = true;
+    } else {
+      api.required = false;
+    }
+  }
 
-  checkOrUncheckChildren(requirement) {
-    if (requirement.required === true) { // The parent has been checked manually
-      requirement.endpoints.forEach(endpoint => {
+  checkOrUncheckChildren(api) {
+    if (api.required === true) { // The parent has been checked manually
+      api.endpoints.forEach(endpoint => {
         endpoint.required = true;
       });
     } else { // The parent has been unchecked manually
-      requirement.endpoints.forEach(endpoint => {
+      api.endpoints.forEach(endpoint => {
         endpoint.required = false;
       });
     }
