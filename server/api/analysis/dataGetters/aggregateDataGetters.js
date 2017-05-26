@@ -1,6 +1,6 @@
 'use strict';
 
-import {getFibitDataGettersByEndpoints} from './fitbit';
+import {getFitbitDataGettersByEndpoints} from './fitbit';
 import {getMovesDataGettersByEndpoints} from './moves';
 /*
 import * from './facebook';

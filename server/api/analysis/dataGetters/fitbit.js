@@ -52,12 +52,12 @@ function handleExpiredAccessToken(user) {
 }
 
 
-export function getFibitDataGettersByEndpoints(endpoints) {
-  dataGetters = [];
+export function getFitbitDataGettersByEndpoints(endpoints) {
+  var dataGetters = [];
   endpoints.forEach(endpoint => {
 
     var date = '2017-02-01'; // Temporary, implement current date later
-    var period = '1m' // Temporary, can implement options someday
+    var period = '1m'; // Temporary, can implement options someday
 
     var endpoint;
     endpoint.name === 'dailyActivitySummary'                            ? endpoint = `/activities/date/${date}.json` : '/profile.json';
