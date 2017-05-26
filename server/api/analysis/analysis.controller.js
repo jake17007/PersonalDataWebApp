@@ -275,11 +275,6 @@ export function runApp(req, res) {
       getUserData(appAndUserData)
     ]);
   })
-  .then(res => {
-    console.log('Heres your current results: ', res);
-    return res;
-  })
-  /*
   .then(result => {
     //console.log('result[1]: ', result[1]);
     //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
@@ -287,8 +282,11 @@ export function runApp(req, res) {
     return runTheApp(result[1]);
     //return {html: '<div>heres some html from the server</div>'}
   })
+  .then(res => {
+    console.log('Heres your current results: ', res);
+    return res;
+  })
   .then(handleTempFile())
-  */
   .then(respondWithResult(res))
   .catch(handleError(res));
 }
