@@ -14,10 +14,12 @@ export class CreateNewAppComponent {
   };
 
   /*@ngInject*/
-  constructor($http, $state) {
-    this.message = 'Hello';
+  constructor($http, $state, modal) {
     this.$http = $http;
     this.$state = $state;
+    this.confirmCreated = modal.confirm.created(function(theState) {
+      theState.go('developers');
+    }, this.$state);
   }
 
   $onInit() {
@@ -70,9 +72,11 @@ export class CreateNewAppComponent {
     // Send it off to the server to be created
     this.$http.post('/api/analyses', this.newApp).
     then(() => {
-      this.$state.go('developers');
+      // Show success modal that goes to developers page
+      this.confirmCreated(this.newApp.name);
     })
   }
+
 
   toggleDropdown(element) {
     element.collapsed = !element.collapsed;
@@ -108,7 +112,6 @@ export class CreateNewAppComponent {
       });
     }
   }
-
 }
 
 

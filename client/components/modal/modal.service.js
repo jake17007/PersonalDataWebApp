@@ -1,20 +1,32 @@
 'use strict';
+const angular = require('angular');
 
-import angular from 'angular';
+/*@ngInject*/
+export function modalService($rootScope, $uibModal) {
+	// AngularJS will instantiate a singleton by calling "new" on this function
 
-export function Modal($rootScope, $uibModal) {
   /**
    * Opens a modal
    * @param  {Object} scope      - an object to be merged with modal's scope
    * @param  {String} modalClass - (optional) class(es) to be applied to the modal
+   * @param {Boolean} allowClose - should the modal be able to be closed by the user without button click
    * @return {Object}            - the instance $uibModal.open() returns
    */
-  function openModal(scope = {}, modalClass = 'modal-default') {
+  function openModal(scope = {}, modalClass = 'modal-default', allowClose=true) {
     var modalScope = $rootScope.$new();
 
     angular.extend(modalScope, scope);
 
+    var backdrop = true;
+    var keyboard = true;
+    if (allowClose === false) {
+      backdrop = 'static';
+      keyboard = false;
+    }
+
     return $uibModal.open({
+      backdrop: backdrop,
+      keyboard: keyboard,
       template: require('./modal.html'),
       windowClass: modalClass,
       scope: modalScope
@@ -68,11 +80,93 @@ export function Modal($rootScope, $uibModal) {
             del.apply(event, args);
           });
         };
+      },
+      /**
+       * Create a function to open a success window with a continue button
+       * @param  {Function} ok - callback, ran when delete is confirmed
+       * @param {Object} theState - the fucking state
+       * @return {Function}     - the function to open the modal (ex. myModalFn)
+       */
+      created(ok = angular.noop, theState) {
+        /**
+         * Open a continue confirmation modal
+         * @param  {String} name   - name or info to show on modal
+         * @param  {All}           - any additional args are passed straight to ok callback
+         */
+        return function() {
+          var args = Array.prototype.slice.call(arguments);
+          var name = args.shift();
+          var submissionAcceptedModal;
+
+          submissionAcceptedModal = openModal({
+            modal: {
+              backdrop: 'static',
+              keyboard: false,
+              dismissable: false,
+              title: 'App Created',
+              html: `<p><strong>${name}</strong> has been created</p>`,
+              buttons: [{
+                classes: 'btn-success',
+                text: 'Continue',
+                click(e) {
+                  submissionAcceptedModal.close(e);
+                }
+              }]
+            }
+          }, 'modal-success', false);
+
+          submissionAcceptedModal.result.then(function(event) {
+            //ok.apply(event, args);
+            ok(theState);
+
+          });
+        };
+      },
+      /**
+       * Create a function to open a success window with a continue button
+       * @param  {Function} ok - callback, ran when delete is confirmed
+       * @param {Object} theState - the fucking state
+       * @return {Function}     - the function to open the modal (ex. myModalFn)
+       */
+      saved(ok = angular.noop, theState) {
+        /**
+         * Open a continue confirmation modal
+         * @param  {String} name   - name or info to show on modal
+         * @param  {All}           - any additional args are passed straight to ok callback
+         */
+        return function() {
+          var args = Array.prototype.slice.call(arguments);
+          var name = args.shift();
+          var submissionAcceptedModal;
+
+          submissionAcceptedModal = openModal({
+            modal: {
+              backdrop: 'static',
+              keyboard: false,
+              dismissable: false,
+              title: 'App Created',
+              html: `<p><strong>${name}</strong> has been saved</p>`,
+              buttons: [{
+                classes: 'btn-success',
+                text: 'Continue',
+                click(e) {
+                  submissionAcceptedModal.close(e);
+                }
+              }]
+            }
+          }, 'modal-success', false);
+
+          submissionAcceptedModal.result.then(function(event) {
+            //ok.apply(event, args);
+            ok(theState);
+
+          });
+        };
       }
     }
   };
 }
 
-export default angular.module('hh7App.Modal', [])
-  .factory('Modal', Modal)
+export default angular.module('hh7App.modal', [])
+  .factory('modal', modalService)
   .name;

@@ -6,10 +6,5 @@ export default function($stateProvider) {
     .state('appStore', {
       url: '/appStore',
       template: '<app-store></app-store>'
-    })
-    .state('appDetails', {
-      url: '/appStore/appDetails',
-      template: '<app-details></app-details>',
-      params: {app: null}
     });
 }

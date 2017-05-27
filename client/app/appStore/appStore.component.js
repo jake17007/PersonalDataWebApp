@@ -4,7 +4,6 @@ const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 
 import routes from './appStore.routes';
-import AppDetailsComponent from './appDetails/appDetails.component'
 
 export class AppStoreComponent {
   apps= [];
@@ -28,7 +27,7 @@ export class AppStoreComponent {
   }
 }
 
-export default angular.module('hh7App.appStore', [uiRouter, AppDetailsComponent])
+export default angular.module('hh7App.appStore', [uiRouter])
   .config(routes)
   .component('appStore', {
     template: require('./appStore.html'),

@@ -1,22 +1,30 @@
 'use strict';
 const angular = require('angular');
 
-export class AppDetailsComponent {
+const uiRouter = require('angular-ui-router');
 
+import routes from './appDetails.routes';
+
+export class AppDetailsComponent {
+  /*@ngInject*/
   requirements = [];
   userIsOwner = false;
   userHasRequiredConnections = false;
 
   /*@ngInject*/
-  constructor($scope, $stateParams, $http, $state) {
-    this.message = 'World';
+  constructor($scope, $stateParams, $http, $state, refreshStore) {
+    // Get possible refresh data
+    if ($stateParams.app) this.app = $stateParams.app;
+    else this.app = refreshStore.getCookieData().app;
+    // Set refresh data
+    refreshStore.setCookieData({app: this.app});
     this.$scope = $scope;
     this.$http = $http;
-    this.app = $stateParams.app;
     this.$state = $state;
   }
 
   $onInit() {
+
     // Get the current user and indicated whether this is the owner of the app or not
     this.$http.get('/api/users/me')
     .then(user => {
@@ -80,12 +88,15 @@ export class AppDetailsComponent {
     return ['one', 'two', 'three', 'four'];//this.requirements;
   }
   */
+
+
 }
 
-export default angular.module('hh7App.appStore.appDetails', [])
+export default angular.module('hh7App.appDetails', [uiRouter])
+  .config(routes)
   .component('appDetails', {
     template: require('./appDetails.html'),
-    controller: ['$scope', '$stateParams', '$http', '$state', AppDetailsComponent],
+    controller: AppDetailsComponent,
     controllerAs: 'appDetailsCtrl'
   })
   .name;

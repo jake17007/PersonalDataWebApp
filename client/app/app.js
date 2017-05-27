@@ -26,6 +26,7 @@ import ConnectComponent from './connect/connect.component';
 import DevelopersComponent from './developers/developers.component';
 import CreateNewAppComponent from './createNewApp/createNewApp.component';
 import AppStoreComponent from './appStore/appStore.component';
+import AppDetailsComponent from './appDetails/appDetails.component';
 import ConnectionDocsComponent from './connectionDocs/connectionDocs.component';
 import UserAppViewComponent from './userAppView/userAppView.component';
 import EditOwnedAppComponent from './editOwnedApp/editOwnedApp.component';
@@ -36,12 +37,14 @@ import main from './main/main.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
+import refreshStore from '../components/refreshStore/refreshStore.service';
+import modal from '../components/modal/modal.service';
 
 
 import './app.scss';
 
 angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, navbar, footer, main, constants, socket, util, ngclipboard
+  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, AppDetailsComponent, navbar, footer, main, constants, socket, util, ngclipboard, refreshStore, modal
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

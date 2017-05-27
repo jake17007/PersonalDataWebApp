@@ -23,7 +23,7 @@
 
 
 
-
+<!--
                 <h4 class="page-header"> Connection Data Requirements </h4>
 
                 <div ng-repeat="requirement in editOwnedAppCtrl.appWithChanges.thirdPartyApiRequirements | orderBy:'label'">
@@ -34,7 +34,35 @@
                     </div>
                   </div>
                 </div>
+-->
+          <div class="col-md-10 col-md-offset-1">
+            <h4 class="page-header"> Connection Data Requirements </h4>
+            <div class="form-group">
 
+              <div class="list-group list-group-root well">
+
+                <div ng-repeat="api in editOwnedAppCtrl.thirdPartyApis | orderBy:'label'">
+                  <div class="list-group-item">
+                    <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="editOwnedAppCtrl.toggleDropdown(api)"></a>{{api.label}}
+                    <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="editOwnedAppCtrl.checkOrUncheckChildren(api)"/>
+                  </div>
+
+                  <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
+                    <div ng-repeat="endpoint in api.endpoints">
+                      <div class="list-group-item left-padding">
+                        <a href="{{endpoint.documentationLink}}" target="_blank">
+                          {{endpoint.label}}
+                        </a>
+                        <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="editOwnedAppCtrl.checkOrUncheckParent(api)"/>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
 
 
             <div class="footer">
