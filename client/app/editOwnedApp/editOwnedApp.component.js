@@ -5,6 +5,8 @@ const uiRouter = require('angular-ui-router');
 
 import routes from './editOwnedApp.routes';
 
+import _ from 'lodash';
+
 export class EditOwnedAppComponent {
 
 
@@ -15,28 +17,33 @@ export class EditOwnedAppComponent {
     else this.appUnchanged = refreshStore.getCookieData().app;
     // Set refresh data
     refreshStore.setCookieData({app: this.appUnchanged});
-    this.appWithChanges = this.appUnchanged;
+    this.appWithChanges = _.clone(this.appUnchanged);
     this.$http = $http;
     this.$state = $state;
+    // Save succes modal
     this.confirmSaved = modal.confirm.saved(function(theState) {
       theState.go('developers');
     }, this.$state);
+    // Confirm delete modal
+    this.confirmDelete = modal.confirm.delete(function(theHttp, theState, theAppWithChanges) {
+      theHttp.delete(`api/analyses/${theAppWithChanges._id}`).
+      then(() => {
+        theState.go('developers');
+      });
+    }, this.$http, this.$state, this.appWithChanges);
   }
 
   $onInit() {
     // Get all available third party api connections
     this.$http.get('/api/thirdPartyApis')
     .then(res => {
-      console.log(res);
       this.thirdPartyApis = res.data;
       // Add a 'collapsed' boolean to each provider for form control
       this.thirdPartyApis.forEach(provider => {
         provider.collapsed = true;
       });
       // Check (as in, mark the checkbox true) the currently required apis according to appUnchanged
-      console.dir(this.appUnchanged);
-      console.dir(this.thirdPartyApis);
-      this.appUnchanged.thirdPartyApiRequirements.forEach(apiOriginal => {
+      this.appWithChanges.thirdPartyApiRequirements.forEach(apiOriginal => {
         this.thirdPartyApis.forEach(apiEdit => {
           if (apiEdit.provider === apiOriginal.provider) {
             apiEdit.required = true;
@@ -83,21 +90,83 @@ export class EditOwnedAppComponent {
   }
 
   saveChanges() {
-    console.log(this.appWithChanges);
+    this.appWithChanges.thirdPartyApiRequirements = [];
+    // Format the requirements and store to the newApp
+    this.thirdPartyApis.forEach(provider => {
+      if (provider.required) {
+
+        // The provider info
+        var requiredProvider = {
+          provider: provider.provider,
+          label: provider.label,
+          endpoints: []
+        };
+
+        // The endpoints info
+        provider.endpoints.forEach(endpoint => {
+          if (endpoint.required) {
+            var requiredEndpoint = {
+              name: endpoint.name,
+              label: endpoint.label,
+              requiredScopes: endpoint.requiredScopes
+            };
+
+            requiredProvider.endpoints.push(requiredEndpoint);
+          }
+        });
+
+        this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
+
+      }
+    });
+
     this.$http.put(`api/analyses/${this.appWithChanges._id}`, this.appWithChanges).
     then(() => {
-      this.$state.go('developers');
+      this.confirmSaved(this.appWithChanges.name);
     });
   }
 
   deleteApp() {
+    /*
     this.$http.delete(`api/analyses/${this.appWithChanges._id}`).
     then(() => {
       this.$state.go('developers');
     });
+    */
+    this.confirmDelete(this.appUnchanged.name);
   }
 
   viewJson() {
+    // This should be made into a function
+    this.appWithChanges.thirdPartyApiRequirements = [];
+    // Format the requirements and store to the newApp
+    this.thirdPartyApis.forEach(provider => {
+      if (provider.required) {
+
+        // The provider info
+        var requiredProvider = {
+          provider: provider.provider,
+          label: provider.label,
+          endpoints: []
+        };
+
+        // The endpoints info
+        provider.endpoints.forEach(endpoint => {
+          if (endpoint.required) {
+            var requiredEndpoint = {
+              name: endpoint.name,
+              label: endpoint.label,
+              requiredScopes: endpoint.requiredScopes
+            };
+
+            requiredProvider.endpoints.push(requiredEndpoint);
+          }
+        });
+
+        this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
+
+      }
+    });
     this.$state.go('jsonView', {app: this.appWithChanges});
   }
 

@@ -13,7 +13,7 @@
 import jsonpatch from 'fast-json-patch';
 import Analysis from './analysis.model';
 import User from '../user/user.model';
-import {aggregateDataGetters} from './dataGetters/aggregateDataGetters';
+import {aggregateDataGetters, handleExpiredTokenErrorResponses} from './dataGetters/aggregateDataGetters';
 import {upsertConnection} from '../../auth/connect/connect.service';
 
 var Git = require('nodegit');
@@ -129,6 +129,38 @@ function buildApp(appAndUserData) {
   });
 }
 
+function handleExpiredTokens(appAndUserData) {
+  return function(returnedData) {
+    console.log('returnedData here: ', returnedData);
+    // Check for errors and update tokens, passes back an array of data getters
+    var handleExpired = handleExpiredTokenErrorResponses(returnedData, appAndUserData);
+    // Rerun getData (in here on it's own) on the data getters passed back
+    
+    handleExpired
+    .then(dataGetters => {
+      return Promise.all(dataGetters);
+    })
+    // Rejoin it with the good data and send it
+    .then(newResults => {
+      var finalResult = [];
+      returnedData.forEach(oldResult => {
+        newResults.forEach(newResult => {
+          if (oldResult.keys()[0] === newResult.keys()[0]) {
+            finalResult.push(newResult);
+          } else {
+            finalResult.push(oldResult);
+          }
+        });
+      });
+      console.log('finalResult: ', finalResult);
+      resolve(finalResult);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  }
+}
+
 function getUserData(appAndUserData) {
   return new Promise(function(resolve, reject) {
     // aggregate the functions needed to retrieve the data from their respective providers' apis
@@ -139,8 +171,8 @@ function getUserData(appAndUserData) {
       }
       // Get all the data
       Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredApiInfo, appAndUserData.user)))
+      .then(handleExpiredTokens(appAndUserData))
       .then(result => {
-        //console.log('heres the result from getUserData: ', result);
         resolve(result);
       })
       .catch(err => {

@@ -2,19 +2,7 @@
 
 
 var MovesApi = require('moves-api').MovesApi;
-
-
-
-/*
-function getFitbitData(accessToken, userId, callback) {
-  console.log('getFitbitData ran');
-  client.get("/profile.json", accessToken, userId)
-  .then(results => {
-    console.log('this ran too')
-    callback(results);
-  });
-}
-*/
+import {upsertConnection} from '../../../auth/connect/connect.service';
 
 export function getMovesDataGettersByEndpoints(endpoints) {
   var dataGetters = [];
@@ -105,6 +93,41 @@ export function getMovesDataGettersByEndpoints(endpoints) {
   return dataGetters;
 }
 
-function refreshAccessToken(userConnectionInfo) {
+function refreshAccessToken(appAndUserData) {
+  return new Promise(function(resolve, reject) {
+    try {
+      console.log('this ran right here in moves');
+      var user = appAndUserData.user;
 
+      var movesConnectionInfo = user.connections.filter(connection => {
+        return connection.provider === 'moves';
+      });
+
+      // Refresh the token
+      MovesApi.refreshToken((err, tokens) => {
+        if (err) reject(err);
+        upsertConnection('moves', user._id, tokens.access_token, tokens.refresh_token, movesConnectionInfo.providerUserId, function(err, user) {
+          if (err) reject(err);
+
+          // Get the moves requirements for the app
+          var movesAppInfo = appAndUserData.app.thirdPartyApiRequirements.filter(requirement => {
+            return requirement.provider === 'moves';
+          });
+          resolve(movesAppInfo);
+        });
+      });
+    } catch(e) {
+      reject(e);
+    }
+
+  });
+}
+
+export function checkForMovesErrors(movesResponses, appAndUserData) {
+  console.log('this ran');
+  movesResponses.forEach(response => {
+    if (response.error === 'invalid_grant') {
+      return refreshAccessToken(appAndUserData);
+    }
+  });
 }

@@ -1,5 +1,7 @@
 'use strict';
 
+import {upsertConnection} from '../../../auth/connect/connect.service';
+
 var FitbitApiClient = require('fitbit-node'),
   client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
 /*
@@ -50,6 +52,8 @@ function handleExpiredAccessToken(user) {
     return 'something went wrong with the api call other than an expired token';
   };
 }
+
+
 
 
 export function getFitbitDataGettersByEndpoints(endpoints) {
@@ -125,10 +129,43 @@ export function getFitbitDataGettersByEndpoints(endpoints) {
   return dataGetters;
 }
 
+function refreshAccessToken(appAndUserData) {
+  return new Promise(function(resolve, reject) {
+    console.log('this ran right here in fitbit');
+    var user = appAndUserData.user;
 
+    var fitbitConnectionInfo = user.connections.filter(connection => {
+      return connection.provider === 'fitbit';
+    });
 
+    // Refresh the token
+    client.refreshAccessToken(fitbitConnectionInfo.accessToken, fitbitConnectionInfo.refreshToken)
+    // Save the new token / refresh token
+    .then(tokens => {
+      upsertConnection('fitbit', user._id, tokens.access_token, tokens.refresh_token, fitbitConnectionInfo.providerUserId, function(err, user) {
+        if (err) reject(err);
 
+        // Get the fitbit requirements for the app
+        var fitbitAppInfo = appAndUserData.app.thirdPartyApiRequirements.filter(requirement => {
+          return requirement.provider === 'fitbit';
+        })
+        resolve(fitbitAppInfo);
+      });
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
 
-function refreshAccessToken(userConnectionInfo) {
-
+export function checkForFitbitErrors(fitbitResponses, appAndUserData) {
+  fitbitResponses.forEach(response => {
+    if (response.errors && response.errors.filter(error => {
+      return error.errorType === 'expired_token';
+    }).length > 0) {
+      console.log('it found the error');
+      console.log('heres the promise from fitbit:', refreshAccessToken(appAndUserData));
+      return refreshAccessToken(appAndUserData);
+    }
+  });
 }

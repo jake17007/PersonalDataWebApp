@@ -44,7 +44,7 @@ export function modalService($rootScope, $uibModal) {
        * @param  {Function} del - callback, ran when delete is confirmed
        * @return {Function}     - the function to open the modal (ex. myModalFn)
        */
-      delete(del = angular.noop) {
+      delete(del = angular.noop, theHttp, theState, theAppWithChanges) {
         /**
          * Open a delete confirmation modal
          * @param  {String} name   - name or info to show on modal
@@ -77,7 +77,8 @@ export function modalService($rootScope, $uibModal) {
           }, 'modal-danger');
 
           deleteModal.result.then(function(event) {
-            del.apply(event, args);
+            //del.apply(event, args);
+            del(theHttp, theState, theAppWithChanges)
           });
         };
       },
@@ -144,17 +145,17 @@ export function modalService($rootScope, $uibModal) {
               backdrop: 'static',
               keyboard: false,
               dismissable: false,
-              title: 'App Created',
+              title: 'App Saved',
               html: `<p><strong>${name}</strong> has been saved</p>`,
               buttons: [{
-                classes: 'btn-success',
+                classes: 'btn-primary',
                 text: 'Continue',
                 click(e) {
                   submissionAcceptedModal.close(e);
                 }
               }]
             }
-          }, 'modal-success', false);
+          }, 'modal-info', false);
 
           submissionAcceptedModal.result.then(function(event) {
             //ok.apply(event, args);
