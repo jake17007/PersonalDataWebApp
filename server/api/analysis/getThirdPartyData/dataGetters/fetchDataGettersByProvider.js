@@ -1,6 +1,7 @@
 'use strict';
 
-import {getFitbitDataGettersByEndpoints, checkForFitbitErrors} from './fitbit';
+//import {getFitbitDataGettersByEndpoints, checkForFitbitErrors} from './fitbit';
+import {getFitbitData} from './fitbit/fitbit';
 import {getMovesDataGettersByEndpoints} from './moves';
 
 /*
@@ -8,16 +9,20 @@ import * from './facebook';
 import * from './moves';
 import * from './twothreeandme';
 */
-function fetchDataGettersByProvider(providerInfo) {
-  if (providerInfo.provider === 'fitbit') {
-    return getFitbitDataGettersByEndpoints(providerInfo.endpoints);
+export function fetchDataGettersByProvider(connectInfo, reqrInfo, user) {
+  if (reqrInfo.provider === 'fitbit') {
+    console.log('providerInfo.endpoints: ', reqrInfo.endpoints);
+    return getFitbitData(connectInfo, reqrInfo.endpoints, user);
   }
+  /*
   if (providerInfo.provider === 'moves') {
-    return getMovesDataGettersByEndpoints(providerInfo.endpoints);
+    return getMovesDataGettersByEndpoints(connectInfo, providerInfo.endpoints);
   }
   if (provider === 'twothreeandme') return getTwothreeandmeData;
+  */
 }
 
+/*
 export function aggregateDataGetters(app, callback) {
   try {
     var dataGetters = [];
@@ -33,7 +38,8 @@ export function aggregateDataGetters(app, callback) {
   }
   callback(null, dataGetters);
 }
-
+*/
+//OOOLLLLDDDD******
 export function handleExpiredTokenErrorResponses(returnedData, appAndUserData) {
   return new Promise(function(resolve, reject) {
     try {

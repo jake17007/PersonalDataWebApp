@@ -2,7 +2,7 @@
 
 
 var MovesApi = require('moves-api').MovesApi;
-import {upsertConnection} from '../../../auth/connect/connect.service';
+import {upsertConnection} from '../../../../auth/connect/connect.service';
 
 export function getMovesDataGettersByEndpoints(endpoints) {
   var dataGetters = [];

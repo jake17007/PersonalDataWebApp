@@ -13,10 +13,11 @@
 import jsonpatch from 'fast-json-patch';
 import Analysis from './analysis.model';
 import User from '../user/user.model';
-import {aggregateDataGetters, handleExpiredTokenErrorResponses} from './dataGetters/aggregateDataGetters';
+import {aggregateDataGetters, handleExpiredTokenErrorResponses} from './getThirdPartyData/getThirdPartyData';
 import {upsertConnection} from '../../auth/connect/connect.service';
+import {buildApp} from './buildApp/buildApp';
+import {getThirdPartyData} from './getThirdPartyData/getThirdPartyData';
 
-var Git = require('nodegit');
 var PythonShell = require('python-shell');
 var fs = require('fs');
 var rimraf = require('rimraf');
@@ -114,28 +115,13 @@ function handleConnectionNotFound(res) {
   }
 }
 
-function buildApp(appAndUserData) {
-  return new Promise(function(resolve, reject) {
-    // Pull the app source code from Github and save it in 'nodegit'
-    //console.log('From build app: ', appAndUserData.app)
-    Git.Clone(appAndUserData.app.githubLink, 'nodegit')
-    .then(repository => {
-      console.log('the build was successful');
-      resolve('build successfull');
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
 function handleExpiredTokens(appAndUserData) {
   return function(returnedData) {
     console.log('returnedData here: ', returnedData);
     // Check for errors and update tokens, passes back an array of data getters
     var handleExpired = handleExpiredTokenErrorResponses(returnedData, appAndUserData);
     // Rerun getData (in here on it's own) on the data getters passed back
-    
+
     handleExpired
     .then(dataGetters => {
       return Promise.all(dataGetters);
@@ -160,7 +146,7 @@ function handleExpiredTokens(appAndUserData) {
     });
   }
 }
-
+/*
 function getUserData(appAndUserData) {
   return new Promise(function(resolve, reject) {
     // aggregate the functions needed to retrieve the data from their respective providers' apis
@@ -182,12 +168,11 @@ function getUserData(appAndUserData) {
 
   });
 }
-
+*/
 // userData = [ {<provider_name>: [<objects>]},
 //              {<provider_name>: [<objects>]}, ...]
 function runTheApp(userData) {
   return new Promise(function(resolve, reject) {
-    console.log('this ran');
     //console.log('userData: ', userData);
     var data = userData; // Just get the user object
 
@@ -294,17 +279,30 @@ export function destroy(req, res) {
     .catch(handleError(res));
 }
 
+/**
+ * Runs an Analysis for a User
+ * INPUT:  req - http request
+ *         res - http response
+ * OUTPUT: Promise
+ */
 export function runApp(req, res) {
   return Promise.all([
     Analysis.findById(req.params.appId).exec(),
     User.findById(req.user._id).exec()
   ])
-  .then(getProviderAccessInfo())
-  .then(handleConnectionNotFound(res))
-  .then((appAndUserData) => {
+  //.then(getProviderAccessInfo())
+  //.then(handleConnectionNotFound(res))
+  .then(result => {
+    var appAndUserData = {
+      app: result[0],
+      user: result[1]
+    };
+    return appAndUserData;
+  })
+  .then(appAndUserData => {
     return Promise.all([
       buildApp(appAndUserData),
-      getUserData(appAndUserData)
+      getThirdPartyData(appAndUserData)
     ]);
   })
   .then(result => {
@@ -350,7 +348,7 @@ export function viewJson(req, res) {
   .then(handleConnectionNotFound(res))
   .then((appAndUserData) => {
     return Promise.all([
-      getUserData(appAndUserData)
+      //getUserData(appAndUserData)
     ]);
   })
   .then(result => {
