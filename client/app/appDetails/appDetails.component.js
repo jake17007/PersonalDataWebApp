@@ -31,9 +31,7 @@ export class AppDetailsComponent {
 
       // Populate the requirements for the app
       this.app.thirdPartyApiRequirements.forEach(requirement => {
-        if (requirement.required === true) {
-          this.requirements.push(requirement);
-        }
+        this.requirements.push(requirement);
       });
 
       // Indicate whether this is the owner of the app or not

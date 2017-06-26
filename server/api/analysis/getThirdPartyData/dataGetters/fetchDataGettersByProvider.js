@@ -2,7 +2,7 @@
 
 //import {getFitbitDataGettersByEndpoints, checkForFitbitErrors} from './fitbit';
 import {getFitbitData} from './fitbit/fitbit';
-import {getMovesDataGettersByEndpoints} from './moves';
+import {getMovesData} from './moves/moves';
 
 /*
 import * from './facebook';
@@ -11,13 +11,12 @@ import * from './twothreeandme';
 */
 export function fetchDataGettersByProvider(connectInfo, reqrInfo, user) {
   if (reqrInfo.provider === 'fitbit') {
-    console.log('providerInfo.endpoints: ', reqrInfo.endpoints);
     return getFitbitData(connectInfo, reqrInfo.endpoints, user);
   }
-  /*
-  if (providerInfo.provider === 'moves') {
-    return getMovesDataGettersByEndpoints(connectInfo, providerInfo.endpoints);
+  if (reqrInfo.provider === 'moves') {
+    return getMovesData(connectInfo, reqrInfo.endpoints, user);
   }
+  /*
   if (provider === 'twothreeandme') return getTwothreeandmeData;
   */
 }
@@ -40,6 +39,7 @@ export function aggregateDataGetters(app, callback) {
 }
 */
 //OOOLLLLDDDD******
+/*
 export function handleExpiredTokenErrorResponses(returnedData, appAndUserData) {
   return new Promise(function(resolve, reject) {
     try {
@@ -74,3 +74,4 @@ export function handleExpiredTokenErrorResponses(returnedData, appAndUserData) {
 
   });
 }
+*/

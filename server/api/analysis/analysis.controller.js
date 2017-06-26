@@ -309,6 +309,7 @@ export function runApp(req, res) {
     //console.log('result[1]: ', result[1]);
     //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
     //console.log('result[1][1].moves: ', result[1][1].moves);
+    console.log('result after refreshing access token: ', JSON.stringify(result, null, 4));
     return runTheApp(result[1]);
     //return {html: '<div>heres some html from the server</div>'}
   })
@@ -340,6 +341,29 @@ export function getMyFavoriteApps(req, res) {
 }
 
 export function viewJson(req, res) {
+  return Promise.all([
+    User.findById(req.user._id).exec()
+  ])
+  .then(result => {
+    var appAndUserData = {
+      app: req.body,
+      user: result[0]
+    };
+    return appAndUserData;
+  })
+  .then(appAndUserData => {
+    return Promise.all([
+      getThirdPartyData(appAndUserData)
+    ]);
+  })
+  .then(result => {
+    return result[0];
+  })
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+}
+/*
+export function viewJson(req, res) {
   return User.findById(req.user._id).exec()
   .then(user => {
       return [req.body, user];
@@ -357,7 +381,7 @@ export function viewJson(req, res) {
   .then(respondWithResult(res))
   .catch(handleError(res));
 }
-
+*/
 function getHtmlFromFile() {
   return new Promise(function(resolve, reject) {
     fs.readFile('server/api/analysis/view.html', 'utf8', (err, theHtml) => {

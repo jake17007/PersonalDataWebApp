@@ -62,6 +62,7 @@ function getEndpointDataGetters(connectInfo, endpoints) {
     var period = '1m'; // Temporary, can implement options someday
 
     var endpoint;
+    endpointInfo.name === 'profile'                                         ? endpoint = '/profile.json' : '/profile.json';
     endpointInfo.name === 'dailyActivitySummary'                            ? endpoint = `/activities/date/${date}.json` : '/profile.json';
     endpointInfo.name === 'activityTimeSeries-calories'                     ? endpoint = `/activities/calories/date/${date}/${period}.json` : '/profile.json';
     endpointInfo.name === 'activityTimeSeries-caloriesBmr'                  ? endpoint = `/activities/caloriesBMR/date/${date}/${period}.json` : '/profile.json';

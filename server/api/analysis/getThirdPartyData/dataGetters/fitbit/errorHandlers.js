@@ -2,6 +2,7 @@
 
 import {getFitbitData} from './fitbit';
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
+import User from '../../../../user/user.model';
 
 var FitbitApiClient = require('fitbit-node'),
   client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
@@ -15,9 +16,9 @@ function refreshAccessToken(connectInfo, user) {
     client.refreshAccessToken(connectInfo.accessToken, connectInfo.refreshToken)
     // Save the new token / refresh token
     .then(tokens => {
-      upsertConnection('fitbit', user._id, tokens.access_token, tokens.refresh_token, connectInfo.providerUserId, function(err, user) {
+      upsertConnection('fitbit', user._id, tokens.access_token, tokens.refresh_token, connectInfo.providerUserId, function(err, userUpdated) {
         if (err) reject(err);
-        resolve('Token refresh successful.');
+        resolve(userUpdated);
       });
     })
     .catch(err => {
@@ -30,7 +31,8 @@ function refreshAccessToken(connectInfo, user) {
   });
 }
 
-function checkForExpiredTokenError(fitbitResponses) {
+function checkForExpiredTokenError(fitbitResponses, accu) {
+  //if (accu == 0) return true; // For Debugging: Forcing a token refresh
   for (var i = 0; i < fitbitResponses.length; i++) {
     var response = fitbitResponses[i][Object.keys(fitbitResponses[i])[0]];
     for (var j = 0; j < response.length; j++) {
@@ -44,15 +46,27 @@ function checkForExpiredTokenError(fitbitResponses) {
     }
   }
   console.log('No expired token error found.');
-  return true;
+  return false;
 }
 
 function handleExpiredToken(connectInfo, endpoints, user, accu) {
   return refreshAccessToken(connectInfo, user)
+  /*
   .then(result => {
-    console.log(result);
+    User.findById(user._id).exec()
+    .then(user => {
+      console.log('user from handleExpiredToken: ', user);
+    })
+    .catch(err => {
+      throw(err);
+    });
+    return result;
+  })
+  */
+  .then(userUpdated => {
+    console.log('userUpdated: ', userUpdated);
     accu++;
-    return getFitbitData(connectInfo, endpoints, user, accu);
+    return getFitbitData(connectInfo, endpoints, userUpdated, accu);
   })
   .catch(err => {
     throw(err);
@@ -65,6 +79,7 @@ function checkForOtherErrors(fitbitResponses) {
     for (var j = 0; j < response.length; j++) {
       var element = response[j];
       if (element.errors) {
+        console.log('Other errors found: ', element.errors);
         return true;
       }
     }
@@ -79,7 +94,9 @@ function handleOtherErrors(fitbitResponses) {
 
 export function handleErrors(connectInfo, endpoints, user, accu) {
   return function(fitbitResponses) {
-    if (checkForExpiredTokenError(fitbitResponses)) {
+    console.log('accu: ', accu);
+    console.log('fitbitRespones: ', fitbitResponses);
+    if (checkForExpiredTokenError(fitbitResponses, accu)) {
       return handleExpiredToken(connectInfo, endpoints, user, accu);
     } else if (checkForOtherErrors(fitbitResponses)) {
       return handleOtherErrors(fitbitResponses);

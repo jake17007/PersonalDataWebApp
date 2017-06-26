@@ -35,6 +35,13 @@ function handleMissingConnections(appAndUserData) {
 
 
 
+export function getConnectInfoByProvider(user, providerName) {
+  return user.connections.filter(connection => {
+    return connection.provider === providerName;
+  })[0];
+}
+
+
 /**
  * Aggregates the functions (which return Promises) needed to get
  * the data from each required third party api endpoint
@@ -49,11 +56,10 @@ function handleMissingConnections(appAndUserData) {
 function aggregateDataGetters(appAndUserData) {
   return function() {
     var dataGetters = [];
+    var connectInfo;
     appAndUserData.app.thirdPartyApiRequirements.forEach(reqrInfo => {
       // Get just the connection info for this provider
-      var connectInfo = appAndUserData.user.connections.filter(connection => {
-        return connection.provider === reqrInfo.provider;
-      })[0];
+      connectInfo = getConnectInfoByProvider(appAndUserData.user, reqrInfo.provider);
       // Get the dataGetters
       dataGetters = dataGetters.concat(fetchDataGettersByProvider(connectInfo, reqrInfo, appAndUserData.user));
     });

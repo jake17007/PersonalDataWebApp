@@ -5,6 +5,7 @@ import config from '../../config/environment';
 //import compose from 'composable-middleware';
 import User from '../../api/user/user.model';
 
+// Returns the updated user
 export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
   var oldConnectionId;
   // Look for an old connection

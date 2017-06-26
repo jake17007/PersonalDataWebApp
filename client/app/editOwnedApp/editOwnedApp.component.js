@@ -89,7 +89,7 @@ export class EditOwnedAppComponent {
     }
   }
 
-  saveChanges() {
+  static updateAppWithChanges() {
     this.appWithChanges.thirdPartyApiRequirements = [];
     // Format the requirements and store to the newApp
     this.thirdPartyApis.forEach(provider => {
@@ -114,11 +114,43 @@ export class EditOwnedAppComponent {
             requiredProvider.endpoints.push(requiredEndpoint);
           }
         });
-
         this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
-
       }
     });
+  }
+
+  saveChanges() {
+
+    // This needs to be turned into a function called updateAppWithChanges
+    /********/
+    this.appWithChanges.thirdPartyApiRequirements = [];
+    // Format the requirements and store to the newApp
+    this.thirdPartyApis.forEach(provider => {
+      if (provider.required) {
+
+        // The provider info
+        var requiredProvider = {
+          provider: provider.provider,
+          label: provider.label,
+          endpoints: []
+        };
+
+        // The endpoints info
+        provider.endpoints.forEach(endpoint => {
+          if (endpoint.required) {
+            var requiredEndpoint = {
+              name: endpoint.name,
+              label: endpoint.label,
+              requiredScopes: endpoint.requiredScopes
+            };
+
+            requiredProvider.endpoints.push(requiredEndpoint);
+          }
+        });
+        this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
+      }
+    });
+    /*********/
 
     this.$http.put(`api/analyses/${this.appWithChanges._id}`, this.appWithChanges).
     then(() => {
@@ -137,7 +169,8 @@ export class EditOwnedAppComponent {
   }
 
   viewJson() {
-    // This should be made into a function
+    // This needs to be turned into a function called updateAppWithChanges
+    /********/
     this.appWithChanges.thirdPartyApiRequirements = [];
     // Format the requirements and store to the newApp
     this.thirdPartyApis.forEach(provider => {
@@ -162,14 +195,12 @@ export class EditOwnedAppComponent {
             requiredProvider.endpoints.push(requiredEndpoint);
           }
         });
-
         this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
-
       }
     });
+    /*********/
     this.$state.go('jsonView', {app: this.appWithChanges});
   }
-
 }
 
 export default angular.module('hh7App.editOwnedApp', [uiRouter])

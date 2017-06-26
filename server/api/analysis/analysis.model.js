@@ -14,7 +14,7 @@ export var AnalysisSchema = new mongoose.Schema({
     endpoints: [{
       name: String,
       label: String,
-      requredScopes: [String]
+      requiredScopes: [String]
     }]
   }]
 });

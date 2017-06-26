@@ -79,6 +79,16 @@ ThirdPartyApi.find({}).remove()
       ],
       endpoints: [
         {
+          name: 'profile',
+          label: 'Profile',
+          documentationLink: 'https://dev.fitbit.com/docs/user/#get-profile',
+          requiredScopes: [
+
+          ],
+          description: '',
+          required: false
+        },
+        {
           name: 'dailyActivitySummary',
           label: 'Daily Activity Summary',
           documentationLink: 'https://dev.fitbit.com/docs/activity/#get-daily-activity-summary',
