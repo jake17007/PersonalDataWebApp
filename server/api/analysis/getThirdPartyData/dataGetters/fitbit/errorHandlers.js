@@ -3,6 +3,7 @@
 import {getFitbitData} from './fitbit';
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
 import User from '../../../../user/user.model';
+import {getConnectInfoByProvider} from '../../getThirdPartyData';
 
 var FitbitApiClient = require('fitbit-node'),
   client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
@@ -66,7 +67,8 @@ function handleExpiredToken(connectInfo, endpoints, user, accu) {
   .then(userUpdated => {
     console.log('userUpdated: ', userUpdated);
     accu++;
-    return getFitbitData(connectInfo, endpoints, userUpdated, accu);
+    var connectInfoUpdated = getConnectInfoByProvider(userUpdated, 'fitbit');
+    return getFitbitData(connectInfoUpdated, endpoints, userUpdated, accu);
   })
   .catch(err => {
     throw(err);

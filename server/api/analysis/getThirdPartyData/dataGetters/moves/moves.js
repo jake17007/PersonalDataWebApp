@@ -2,7 +2,7 @@
 
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
 import {handleErrors} from './errorHandlers';
-var MovesApi = require('../../../../../moves-api').MovesApi;
+var MovesApi = require('moves-api').MovesApi;
 
 function getEndpointDataGetters(connectInfo, endpoints, accu) {
   var dataGetters = [];

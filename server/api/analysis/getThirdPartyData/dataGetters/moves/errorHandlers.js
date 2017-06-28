@@ -3,7 +3,7 @@
 import {getMovesData} from './moves';
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
 import {getConnectInfoByProvider} from '../../getThirdPartyData';
-var MovesApi = require('../../../../../moves-api').MovesApi;
+var MovesApi = require('moves-api').MovesApi;
 
 function refreshAccessToken(connectInfo, user) {
   console.log('refreshAccessToken was run');
