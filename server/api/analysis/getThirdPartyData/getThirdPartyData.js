@@ -117,6 +117,19 @@ function runDataGetters(appAndUserData) {
   }
 }
 
+function wrapWithProviderLabels(appAndUserData) {
+  return function(returnedData) {
+
+    var requiredApis = appAndUserData.app.thirdPartyApiRequirements;
+    var labeledData = [];
+    for (var i = 0; i < requiredApis.length; i++) {
+      labeledData.push({[requiredApis[i].provider]: returnedData[i]});
+    }
+    return labeledData
+    //return returnedData;
+  }
+}
+
 /**
  * Retrieves the required data required for the app via third
  * party api's
@@ -132,6 +145,7 @@ export function getThirdPartyData(appAndUserData) {
     handleMissingConnections(appAndUserData)
     .then(aggregateDataGetters(appAndUserData))
     .then(runDataGetters(appAndUserData))
+    .then(wrapWithProviderLabels(appAndUserData))
     .then(handleErrors())
     .then(result => {
       resolve(result);

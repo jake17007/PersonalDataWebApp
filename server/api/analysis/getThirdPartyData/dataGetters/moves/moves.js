@@ -109,7 +109,7 @@ export function getMovesData(connectInfo, endpoints, user, accu) {
       })
       .then(result => {
         console.log('result: ', result);
-        resolve({moves: result});
+        resolve(result);
       })
       .catch(err => {
         reject(err);

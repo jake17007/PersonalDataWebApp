@@ -121,7 +121,7 @@ export function getFitbitData(connectInfo, endpoints, user, accu) {
       .then(handleErrors(connectInfo, endpoints, user, accu))
       .then(result => {
         console.log('result: ', result);
-        resolve({fitbit: result});
+        resolve(result);
       })
       .catch(err => {
         reject(err);

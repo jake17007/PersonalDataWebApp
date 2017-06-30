@@ -9,9 +9,6 @@ var FitbitApiClient = require('fitbit-node'),
   client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
 
 function refreshAccessToken(connectInfo, user) {
-  console.log('refreshAccessToken was run');
-  console.log('connectInfo.accessToken: ', connectInfo.accessToken);
-  console.log('connectInfo.refreshToken: ', connectInfo.refreshToken);
   return new Promise(function(resolve, reject) {
     // Refresh the token
     client.refreshAccessToken(connectInfo.accessToken, connectInfo.refreshToken)
@@ -23,7 +20,7 @@ function refreshAccessToken(connectInfo, user) {
       });
     })
     .catch(err => {
-      console.log('there was an error in refreshing the access token: ', err);
+      console.log('There was an error in attemtping to refresh the access token: ', err);
       if (err.context) {
         console.log('err.context: ', err.context);
       }
@@ -52,20 +49,7 @@ function checkForExpiredTokenError(fitbitResponses, accu) {
 
 function handleExpiredToken(connectInfo, endpoints, user, accu) {
   return refreshAccessToken(connectInfo, user)
-  /*
-  .then(result => {
-    User.findById(user._id).exec()
-    .then(user => {
-      console.log('user from handleExpiredToken: ', user);
-    })
-    .catch(err => {
-      throw(err);
-    });
-    return result;
-  })
-  */
   .then(userUpdated => {
-    console.log('userUpdated: ', userUpdated);
     accu++;
     var connectInfoUpdated = getConnectInfoByProvider(userUpdated, 'fitbit');
     return getFitbitData(connectInfoUpdated, endpoints, userUpdated, accu);
@@ -96,8 +80,6 @@ function handleOtherErrors(fitbitResponses) {
 
 export function handleErrors(connectInfo, endpoints, user, accu) {
   return function(fitbitResponses) {
-    console.log('accu: ', accu);
-    console.log('fitbitRespones: ', fitbitResponses);
     if (checkForExpiredTokenError(fitbitResponses, accu)) {
       return handleExpiredToken(connectInfo, endpoints, user, accu);
     } else if (checkForOtherErrors(fitbitResponses)) {

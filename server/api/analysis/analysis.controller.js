@@ -171,17 +171,16 @@ function getUserData(appAndUserData) {
 */
 // userData = [ {<provider_name>: [<objects>]},
 //              {<provider_name>: [<objects>]}, ...]
-function runTheApp(userData) {
+function runAppForOutput(userData) {
   return new Promise(function(resolve, reject) {
     //console.log('userData: ', userData);
-    var data = userData; // Just get the user object
+    //var data = userData; // Just get the user object
 
     /**** CALLING PYTHON ****/
     var options = {mode: 'json'};
-    var pyshell = new PythonShell('nodegit/pythonTestApp.py', options);
+    var pyshell = new PythonShell('nodegit/app.py', options);
 
-
-    pyshell.send(data);
+    pyshell.send(userData);
 
     var output;
     pyshell.on('message', function(pythonOutput) {
@@ -306,11 +305,10 @@ export function runApp(req, res) {
     ]);
   })
   .then(result => {
-    //console.log('result[1]: ', result[1]);
+    console.log('result just before runAppForOutput: ', JSON.stringify(result[1], null, 2));
     //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
     //console.log('result[1][1].moves: ', result[1][1].moves);
-    console.log('result after refreshing access token: ', JSON.stringify(result, null, 4));
-    return runTheApp(result[1]);
+    return runAppForOutput(result[1]);
     //return {html: '<div>heres some html from the server</div>'}
   })
   .then(res => {
@@ -344,10 +342,10 @@ export function viewJson(req, res) {
   return Promise.all([
     User.findById(req.user._id).exec()
   ])
-  .then(result => {
+  .then(user => {
     var appAndUserData = {
       app: req.body,
-      user: result[0]
+      user: user[0]
     };
     return appAndUserData;
   })
