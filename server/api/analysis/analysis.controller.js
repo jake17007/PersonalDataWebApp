@@ -305,19 +305,22 @@ export function runApp(req, res) {
     ]);
   })
   .then(result => {
-    console.log('result just before runAppForOutput: ', JSON.stringify(result[1], null, 2));
     //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
     //console.log('result[1][1].moves: ', result[1][1].moves);
     return runAppForOutput(result[1]);
     //return {html: '<div>heres some html from the server</div>'}
   })
   .then(res => {
-    console.log('Heres your current results: ', res);
+    //console.log('Heres your current results: ', res);
     return res;
   })
   .then(handleTempFile())
   .then(respondWithResult(res))
-  .catch(handleError(res));
+  .catch(handleError(res))
+  .then(handleTempFile())
+  .catch(err => {
+    console.log('An error in deleting the temp file occured: ', err);
+  });
 }
 
 // Gets a list of all the given user's apps they own
