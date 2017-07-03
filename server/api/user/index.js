@@ -15,5 +15,6 @@ router.post('/', controller.create);
 router.put('/addAppToUsersFavorites/:appId', auth.isAuthenticated(), controller.addAppToUsersFavorites);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/removeAppFromFavorites/:appId', auth.isAuthenticated(), controller.removeAppFromFavorites);
+router.get('/connections', auth.isAuthenticated(), controller.connections);
 
 module.exports = router;

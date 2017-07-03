@@ -176,3 +176,23 @@ export function me(req, res, next) {
 export function authCallback(req, res) {
   res.redirect('/');
 }
+
+/**
+ * Get my connections
+ */
+export function connections(req, res, next) {
+  var userId = req.user._id;
+
+  return User.findOne({ _id: userId }, '-salt -password').exec()
+    // Get the user
+    .then(user => { // don't ever give out the password or salt
+      if(!user) {
+        return res.status(401).end();
+      }
+      return user;
+    })
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => next(err));
+}

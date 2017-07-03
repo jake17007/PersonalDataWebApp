@@ -30,7 +30,7 @@ export class DashboardComponent {
       console.log(err);
     });
 
-    this.$http.get('api/users/me')
+    this.$http.get('api/users/connections')
     .then(response => {
       this.myConnections = response.data.connections;
     })
