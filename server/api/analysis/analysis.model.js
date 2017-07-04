@@ -4,18 +4,14 @@ import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
 export var AnalysisSchema = new mongoose.Schema({
-  ownerId: String,
+  owner: {type: Schema.Types.ObjectId, ref: 'User'},
   name: String,
   githubLink: String,
   description: String,
   thirdPartyApiRequirements: [{
-    provider: String,
+    thirdPartyApi: {type: Schema.Types.ObjectId, ref: 'Analysis'},
     label: String,
-    endpoints: [{
-      name: String,
-      label: String,
-      requiredScopes: [String]
-    }]
+    endpoints: [{type: Schema.Types.ObjectId, ref: 'Endpoint'}]
   }]
 });
 

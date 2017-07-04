@@ -5,10 +5,11 @@ mongoose.Promise = require('bluebird');
 import mongoose, {Schema} from 'mongoose';
 
 export var ConnectionSchema = new Schema({
-  provider: String,
   accessToken: String,
   refreshToken: String,
-  providerUserId: String
+  providerUserId: String,
+  availableScopes: [{type: Schema.Types.ObjectId, ref: 'Scope'}],
+  thirdPartyApi: {type: Schema.Types.ObjectId, ref: 'ThirdPartyApi'}
 });
 
 /*

@@ -41,8 +41,8 @@ var UserSchema = new Schema({
   google: {},
   github: {},
   connections: [ConnectionSchema],
-  favoriteApps: [String],
-  ownedAppIds: [String]
+  favoriteApps: [{type: Schema.Types.ObjectId, ref: 'Analysis'}],
+  ownedAppIds: [{type: Schema.Types.ObjectId, ref: 'Analysis'}]
 });
 
 /**
