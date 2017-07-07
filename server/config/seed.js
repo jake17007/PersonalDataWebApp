@@ -60,7 +60,7 @@ User.find({}).remove()
     });
   });
 */
-
+/*
 ThirdPartyApi.find({}).remove()
   .then(() => {
     // Create thirdParyApi
@@ -334,3 +334,4 @@ ThirdPartyApi.find({}).remove()
   .catch(err => {
     console.log('An error occurd in populating the ThirdPartyApis: ', err);
   });
+*/

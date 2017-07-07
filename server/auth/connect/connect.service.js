@@ -101,6 +101,8 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
   .then(result => {
     var thirdPartyApi = result[0];
     var user = result[1];
+    console.log('before edit');
+    console.log(JSON.stringify(user, null, 2));
     var newConnection = {
       accessToken: accessToken,
       refreshToken: refreshToken,
@@ -108,14 +110,28 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
       availableScopes: [],
       thirdPartyApi: thirdPartyApi._id
     }
-    _.remove(user.connection, function(connection) {
-      return connection.thirdPartyApi === thirdPartyApi._id;
-    });
+    var oldConnection = _.find(user.connections, {thirdPartyApi: thirdPartyApi._id})
+    if (oldConnection) {
+      var oldConnectionId = oldConnection._id;
+      user.connections.id(oldConnectionId).remove();
+    }
+    //_.remove(user.connections, {thirdPartyApi: thirdPartyApi._id});
+    console.log('after removal');
+    console.log(JSON.stringify(user, null, 2));
     user.connections.push(newConnection);
-    user.save(function(err, user) {
+    console.log('after push');
+    console.log(JSON.stringify(user, null, 2));
+    user.save()
+      .then(savedUser => callback(null, savedUser))
+      .catch(err => callback(err));
+      /*
+    user.save(function(err, newUser) {
       if (err) throw(err);
-      callback(null, user);
+      console.log('after save');
+      console.log(JSON.stringify(newUser, null, 2));
+      callback(null, newUser);
     });
+    */
   })
   .catch(err => {
     console.log('There was an error in upserting the connection: ', err);
