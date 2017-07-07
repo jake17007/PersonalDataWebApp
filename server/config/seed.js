@@ -7,6 +7,7 @@
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
 import ThirdPartyApi from '../api/thirdPartyApi/thirdPartyApi.model'
+import Scope from '../api/scope/scope.model'
 
 Thing.find({}).remove()
   .then(() => {
@@ -62,31 +63,18 @@ User.find({}).remove()
 
 ThirdPartyApi.find({}).remove()
   .then(() => {
+    // Create thirdParyApi
     ThirdPartyApi.create({
       provider: 'fitbit',
-      required: false,
       label: 'Fitbit',
-      scopes: [
-        'activity',
-        'heartrate',
-        'location',
-        'nutrition',
-        'profile',
-        'settings',
-        'sleep',
-        'social',
-        'weight'
-      ],
-      endpoints: [
-        {
+      endpoints: [{
           name: 'profile',
           label: 'Profile',
           documentationLink: 'https://dev.fitbit.com/docs/user/#get-profile',
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         },
         {
           name: 'dailyActivitySummary',
@@ -95,8 +83,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-calories',
           label: 'Activity Time Series - Calories',
@@ -104,8 +91,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         },{
           name: 'activityTimeSeries-caloriesBmr',
           label: 'Activity Time Series - Calories BMR',
@@ -113,8 +99,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-steps',
           label: 'Activity Time Series - Steps',
@@ -122,8 +107,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-distance',
           label: 'Activity Time Series - Distance',
@@ -131,8 +115,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-floors',
           label: 'Activity Time Series - Floors',
@@ -140,8 +123,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-elevation',
           label: 'Activity Time Series - Elevation',
@@ -149,8 +131,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-minutesSedentary',
           label: 'Activity Time Series - Minutes Sedentary',
@@ -158,8 +139,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-minutesLightlyActive',
           label: 'Activity Time Series - Minutes Lightly Active',
@@ -167,8 +147,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-minutesFairlyActive',
           label: 'Activity Time Series - Minutes Fairly Active',
@@ -176,8 +155,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-minutesVeryActive',
           label: 'Activity Time Series - Minutes Very Active',
@@ -185,8 +163,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-activityCalories',
           label: 'Activity Time Series - Activity Calories',
@@ -194,8 +171,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-calories',
           label: 'Activity Time Series - Tracker - Calories',
@@ -203,8 +179,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-steps',
           label: 'Activity Time Series - Tracker - Steps',
@@ -212,8 +187,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-distance',
           label: 'Activity Time Series - Tracker - Distance',
@@ -221,8 +195,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-floors',
           label: 'Activity Time Series - Tracker - Floors',
@@ -230,8 +203,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-elevation',
           label: 'Activity Time Series - Tracker - Elevation',
@@ -239,8 +211,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-minutesSedentary',
           label: 'Activity Time Series - Tracker - Minutes Sedentary',
@@ -248,8 +219,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-minutesLightlyActive',
           label: 'Activity Time Series - Tracker - Minutes Lightly Active',
@@ -257,8 +227,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-minutesFairlyActive',
           label: 'Activity Time Series - Tracker - Minutes Fairly Active',
@@ -266,8 +235,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-minutesVeryActive',
           label: 'Activity Time Series - Tracker - Minutes Very Active',
@@ -275,8 +243,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'activityTimeSeries-tracker-activityCalories',
           label: 'Activity Time Series - Tracker - Activity Calories',
@@ -284,8 +251,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'bodyTimeSeries-bmi',
           label: 'Body Time Series - BMI',
@@ -293,8 +259,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'bodyTimeSeries-fat',
           label: 'Body Time Series - Fat',
@@ -302,8 +267,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'bodyTimeSeries-weight',
           label: 'Body Time Series - Weight',
@@ -311,8 +275,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'foodOrWaterTimeSeries-caloresIn',
           label: 'Food or Water Time Series - Calories In',
@@ -320,8 +283,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'foodOrWaterTimeSeries-water',
           label: 'Food or Water Time Series - Water',
@@ -329,8 +291,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'heartRateTimeSeries',
           label: 'Heart Rate Time Series',
@@ -338,8 +299,7 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'sleepLogsList',
           label: 'Sleep Logs List',
@@ -347,43 +307,30 @@ ThirdPartyApi.find({}).remove()
           requiredScopes: [
 
           ],
-          description: '',
-          required: false
-        }
-      ]
+          description: ''
+        }]
     }, {
       provider: 'moves',
-      required: false,
       label: 'Moves',
-      scopes: [
-        'default',
-        'activity',
-        'location'
-      ],
-      endpoints: [
-        {
+      endpoints: [{
           name: 'profile',
           label: 'Profile',
           documentationLink: 'https://dev.moves-app.com/docs/api_profile',
           requiredScopes: [
-            'default'
+
           ],
-          description: '',
-          required: false
+          description: ''
         }, {
           name: 'storyLine',
           label: 'Storyline',
           documentationLink: 'https://dev.moves-app.com/docs/api_storyline',
           requiredScopes: [
-            'activity',
-            'location'
+
           ],
-          description: '',
-          required: false
-        }
-      ]
-    })
-    .then(() => {
-      console.log('finished populating ThirdPartyApis');
+          description: ''
+        }]
     });
+  })
+  .catch(err => {
+    console.log('An error occurd in populating the ThirdPartyApis: ', err);
   });

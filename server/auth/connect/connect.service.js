@@ -4,13 +4,16 @@ import config from '../../config/environment';
 //import expressJwt from 'express-jwt';
 //import compose from 'composable-middleware';
 import User from '../../api/user/user.model';
+import ThirdPartyApi from '../../api/thirdPartyApi/thirdPartyApi.model';
+import _ from 'lodash';
 
+/*
 // Returns the updated user
 export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
   var oldConnectionId;
   // Look for an old connection
   User.findOne(
-    {'_id': userId, 'connections.provider': provider},
+    {'_id': userId, 'connections.thirdPartyApi.provider': },
     {'connections.$': 1},
     function(err, user) {
       if (err) {
@@ -81,4 +84,41 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
       }
     }
   )
+}
+*/
+// Returns the updated user
+export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
+  console.log('this ran');
+  Promise.all([
+    ThirdPartyApi.findOne({'provider': provider}).exec(),
+    User.findById(userId).exec()
+  ])
+  .then(result => {
+    if (!result[0]) throw('No matching thirdPartyApi found for provider: ', provider);
+    if (!result[1]) throw('No matching user found for userId: ', userId);
+    return result;
+  })
+  .then(result => {
+    var thirdPartyApi = result[0];
+    var user = result[1];
+    var newConnection = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      providerUserId: providerUserId,
+      availableScopes: [],
+      thirdPartyApi: thirdPartyApi._id
+    }
+    _.remove(user.connection, function(connection) {
+      return connection.thirdPartyApi === thirdPartyApi._id;
+    });
+    user.connections.push(newConnection);
+    user.save(function(err, user) {
+      if (err) throw(err);
+      callback(null, user);
+    });
+  })
+  .catch(err => {
+    console.log('There was an error in upserting the connection: ', err);
+    callback(err);
+  });
 }

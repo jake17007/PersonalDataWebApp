@@ -1,7 +1,6 @@
 'use strict';
 
-import mongoose from 'mongoose';
-var Schema = mongoose.Schema;
+import mongoose, {Schema} from 'mongoose';
 
 export var AnalysisSchema = new mongoose.Schema({
   owner: {type: Schema.Types.ObjectId, ref: 'User'},

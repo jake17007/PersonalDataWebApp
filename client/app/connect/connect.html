@@ -1,7 +1,20 @@
 <div class="container">
-  <div class="row">
-    <h1 class="col-md-6 col-md-offset-3">My Connections</h1>
+  <div class="col-md-6 col-md-offset-3">
+
+    <h1 class="page-header">Connections</h1>
+
+    <ul class="list-group" ng-repeat="thirdPartyApi in connectCtrl.thirdPartyApis">
+      <li class="list-group-item clearfix">
+          {{thirdPartyApi.label}}
+          <button type="button" class="btn btn-primary pull-right" ng-click="connectCtrl.connectAcct(thirdPartyApi.provider)">Connect</button>
+      </li>
+    </ul>
+
   </div>
+</div>
+
+  <!-- old -->
+  <!--
   <div class="row">
     <div class="list-group col-md-6 col-md-offset-3">
       <div class="row list-group-item">
@@ -28,6 +41,7 @@
           <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
         </div>
       </div>
+    -->
       <!--
 
       <li class="list-group-item">
@@ -83,6 +97,3 @@
         <button type="button" class="btn btn-secondary">Connect</button>
       </li>
     -->
-    </div>
-  </div>
-</div>

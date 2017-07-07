@@ -8,7 +8,7 @@ export var ConnectionSchema = new Schema({
   accessToken: String,
   refreshToken: String,
   providerUserId: String,
-  availableScopes: [{type: Schema.Types.ObjectId, ref: 'Scope'}],
+  availableScopes: [String],
   thirdPartyApi: {type: Schema.Types.ObjectId, ref: 'ThirdPartyApi'}
 });
 

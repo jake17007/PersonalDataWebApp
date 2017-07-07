@@ -16,8 +16,6 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
-  require('../api/scope/scope.socket').register(socket);
-  require('../api/endpoint/endpoint.socket').register(socket);
   require('../api/thirdPartyApi/thirdPartyApi.socket').register(socket);
   require('../api/provider/provider.socket').register(socket);
   require('../api/analysis/analysis.socket').register(socket);
