@@ -92,7 +92,8 @@ export function checkForMovesErrors(movesResponses, appAndUserData) {
   });
 }
 
-export function getMovesData(connectInfo, endpoints, user, accu) {
+export function getMovesData(connectInfo, reqrInfo, user, accu) {
+  var endpoints = reqrInfo.endpoints;
   var endpointDataGetters = getEndpointDataGetters(connectInfo, endpoints);
   if (accu >= 5) {
     throw('Too many calls');
@@ -102,7 +103,7 @@ export function getMovesData(connectInfo, endpoints, user, accu) {
       Promise.all(endpointDataGetters.map(endpointDataGetter => endpointDataGetter(connectInfo, user)))
       .catch(err => {
         if (err === 'expired_access_token') {
-          return handleErrors(err, connectInfo, endpoints, user, accu)
+          return handleErrors(err, connectInfo, endpoints, user, reqrInfo, accu)
         } else {
           reject(err);
         }

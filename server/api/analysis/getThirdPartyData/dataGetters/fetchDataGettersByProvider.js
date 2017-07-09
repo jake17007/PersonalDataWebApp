@@ -11,10 +11,10 @@ import * from './twothreeandme';
 */
 export function fetchDataGettersByProvider(connectInfo, reqrInfo, user) {
   if (reqrInfo.thirdPartyApi.provider === 'fitbit') {
-    return getFitbitData(connectInfo, reqrInfo.endpoints, user);
+    return getFitbitData(connectInfo, reqrInfo, user);
   }
   if (reqrInfo.thirdPartyApi.provider === 'moves') {
-    return getMovesData(connectInfo, reqrInfo.endpoints, user);
+    return getMovesData(connectInfo, reqrInfo, user);
   }
   /*
   if (provider === 'twothreeandme') return getTwothreeandmeData;

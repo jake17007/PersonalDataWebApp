@@ -1,0 +1,146 @@
+<div class="container">
+  <div class="md-col-10 col-md-offset-2">
+    <div class="page-header">
+      <h1>
+        Developer Guide
+      </h1>
+      <p class="lead">
+        A guide to creating apps for the Connectrix platform
+      </p>
+    </div>
+    <h2>
+      Introduction
+    </h2>
+    <p class="lead">
+      What is Connectrix?
+    </p>
+    <p>
+      Connectrix is a platform for secure personal data analytics. Our software aggregates the data, feeds it to the app you've created for our platform, and delivers the output to the user. In this way, the user can benefit from a community of developers/analysts like you who make apps for them, but they don't have to worry about spreading their personal data all over the web.
+    </p>
+    <p class="lead">
+      How does it work?
+    </p>
+    <p>
+      As a developer, you create a Python program that accepts preformatted JSON data from any of the third-parties you require for your app -- e.g. Fitbit. Your program accepts the data, does some calculation, formats the output to HTML/CSS/JavaScript, and sends it off for us to render to the user. To maintain the security of the user's personal data, you store your program on Github; when the user wants to use your app, we retrieve it and run it in a sandbox on our secure servers.
+    </p>
+    <h2>
+      Before Starting
+    </h2>
+    <p class="lead">
+      Required
+    </p>
+    <h4>Github Account</h4>
+    <p>
+      You'll need a Github account to store your program. It should be in it's own <strong>public</strong> repository.
+    </p>
+    <p class="lead">
+      Highly Recommended
+    </p>
+    <h4>Fitbit Example Data</h4>
+    <p>
+      In order to test your program, we recommend using your own data. This means that for any connections you will require for your app, you should have those connections established on your own Connectrix user account. For the Getting Started Tutorial, a Fitbit connection will be used. Even if you don't have a Fitbit, create an account on Fitbit.com. We'll be retrieving and analyzing basic profile information. If you really don't want to do this, you can use the example data provided in the test engine below.
+    </p>
+    <h4>Node.js</h4>
+    <p>
+      In order to test your program on your local machine before publishing it, we recommend installing Node.js to run the test engine provided below. You can find installation instructions at <a href="https://nodejs.org/en/" target="_blank">Nodejs.org</a>.
+    </p>
+    <h2>
+      Getting Started Tutorial
+    </h2>
+    <p class="lead">
+      Create a New App
+    </p>
+    <ol>
+      <li>
+        Navigate to the <a target="_blank" ui-sref="createNewApp">Create a New App page</a>.
+      </li>
+      <li>
+        Give your app a name. (All of this information can be changed later.)
+      </li>
+      <li>
+        Indicate the url of the public Github repository where you'll be storing your program.
+      </li>
+      <li>
+        Give your app a description.
+      </li>
+      <li>
+        Select the third-party data that will be required for your app. For this tutorial, only select Fitbit > Profile.
+      </li>
+      <li>
+        Click save.
+      </li>
+    </ol>
+    <p class="lead">
+      Write Your App
+    </p>
+    <h4>Test Engine</h4>
+    <p>
+      Download/clone this sample program to your local environment to begin writing your app. It's a Node.js program that feeds data to your program, and after your program has delivered output, it's written to an HTML file.
+    </p>
+    <h4>Copy/Paste Example Data</h4>
+    <ol>
+      <li>
+        Make sure you have established the Fitbit connection for your Connectrix user account. If you haven't, you can do so on the <a target="_blank" ui-sref="connect">Connect page</a>.
+      </li>
+      <li>
+        From the <a target="_blank" ui-sref="developers">Developers page</a>, click your new app, then click "Edit App" at the upper right of the page.
+      </li>
+      <li>
+        Click "View JSON" at the bottom of the page.
+      </li>
+      <li>
+        Click "Copy to Clipboard" at the upper right of the page.
+      </li>
+      <li>
+        Paste the your data in the data.json file of the Test Engine. (Replace the existing data.)
+      </li>
+    </ol>
+    <h4>Give It a Test Run</h4>
+    <ol>
+      <li>
+        Open your Terminal or Command Prompt.
+      </li>
+      <li>
+        Navigate to the Test Engine directory.
+      </li>
+      <li>
+        Run <code>node runApp.js</code>.
+      </li>
+      <li>
+        Located in the Test Engine directory, open view.html file in your browser. You should see your Fitbit username.
+      </li>
+    </ol>
+    <h4>Edit Your Program</h4>
+    <ol>
+      <li>
+        Open app.py in a text editor. This is the main script that is exectuted by Connectrix which accepts the data and returns output.
+      </li>
+      <li>
+        Edit the line with your fitbit user name to say <code>username = 'Hello, ' + username</code>, and save the file.
+      </li>
+      <li>
+        Run <code>node runApp.js</code> again.
+      </li>
+      <li>
+        When you refresh your browser pointed at view.json, you should now see, "Hello, ..." by your Fitbit username.
+      </li>
+    </ol>
+    <h4>Push to Github and Test Online</h4>
+    <ol>
+      <li>
+        Push your program to your Github repository. You may push the entire Test Engine directory or just the necessary Python files.
+      </li>
+      <li>
+        Navigate to the <a target="_blank" ui-sref="developers">Developers page</a>, click your app, and click "Use App" at the upper right of the page.
+      </li>
+      <li>
+        You should be redirected to you Dashboard, where your new app should be listed.
+      </li>
+      <li>
+        Click to use the app and you're done!
+      </li>
+    </ol>
+
+
+  </div>
+</div>

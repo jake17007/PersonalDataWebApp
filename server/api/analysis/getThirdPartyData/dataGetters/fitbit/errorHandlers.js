@@ -3,7 +3,7 @@
 import {getFitbitData} from './fitbit';
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
 import User from '../../../../user/user.model';
-import {getConnectInfoByProvider} from '../../getThirdPartyData';
+import {getConnectInfoByThirdPartyApi} from '../../getThirdPartyData';
 
 var FitbitApiClient = require('fitbit-node'),
   client = new FitbitApiClient(process.env.FITBIT_ID, process.env.FITBIT_SECRET);
@@ -47,11 +47,11 @@ function checkForExpiredTokenError(fitbitResponses, accu) {
   return false;
 }
 
-function handleExpiredToken(connectInfo, endpoints, user, accu) {
+function handleExpiredToken(connectInfo, endpoints, user, reqrInfo, accu) {
   return refreshAccessToken(connectInfo, user)
   .then(userUpdated => {
     accu++;
-    var connectInfoUpdated = getConnectInfoByProvider(userUpdated, 'fitbit');
+    var connectInfoUpdated = getConnectInfoByThirdPartyApi(userUpdated, reqrInfo.thirdPartyApi._id);
     return getFitbitData(connectInfoUpdated, endpoints, userUpdated, accu);
   })
   .catch(err => {
@@ -78,10 +78,10 @@ function handleOtherErrors(fitbitResponses) {
   return fitbitResponses;
 }
 
-export function handleErrors(connectInfo, endpoints, user, accu) {
+export function handleErrors(connectInfo, endpoints, user, reqrInfo, accu) {
   return function(fitbitResponses) {
     if (checkForExpiredTokenError(fitbitResponses, accu)) {
-      return handleExpiredToken(connectInfo, endpoints, user, accu);
+      return handleExpiredToken(connectInfo, endpoints, user, reqrInfo, accu);
     } else if (checkForOtherErrors(fitbitResponses)) {
       return handleOtherErrors(fitbitResponses);
     } else {

@@ -2,7 +2,7 @@
 
 import {getMovesData} from './moves';
 import {upsertConnection} from '../../../../../auth/connect/connect.service';
-import {getConnectInfoByProvider} from '../../getThirdPartyData';
+import {getConnectInfoByThirdPartyApi} from '../../getThirdPartyData';
 var MovesApi = require('moves-api').MovesApi;
 
 function refreshAccessToken(connectInfo, user) {
@@ -55,10 +55,10 @@ function checkForExpiredTokenError(movesResponses, accu) {
   return false;
 }
 
-function handleExpiredToken(connectInfo, endpoints, user, accu) {
+function handleExpiredToken(connectInfo, endpoints, user, reqrInfo, accu) {
   return refreshAccessToken(connectInfo, user)
   .then(userUpdated => {
-    connectInfo = getConnectInfoByProvider(userUpdated, 'moves');
+    connectInfo = getConnectInfoByThirdPartyApi(userUpdated, reqrInfo.thirdPartyApi._id);
     console.log('userUpdated: ', userUpdated);
     accu++;
     return getMovesData(connectInfo, endpoints, userUpdated, accu);

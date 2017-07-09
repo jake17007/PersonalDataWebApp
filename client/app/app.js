@@ -31,6 +31,7 @@ import ConnectionDocsComponent from './connectionDocs/connectionDocs.component';
 import UserAppViewComponent from './userAppView/userAppView.component';
 import EditOwnedAppComponent from './editOwnedApp/editOwnedApp.component';
 import JsonViewComponent from './jsonView/jsonView.component';
+import DeveloperGuideComponent from './developerGuide/developerGuide.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -44,7 +45,7 @@ import modal from '../components/modal/modal.service';
 import './app.scss';
 
 angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, AppDetailsComponent, navbar, footer, main, constants, socket, util, ngclipboard, refreshStore, modal
+  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, ConnectionDocsComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, AppDetailsComponent, DeveloperGuideComponent, navbar, footer, main, constants, socket, util, ngclipboard, refreshStore, modal
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

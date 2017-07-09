@@ -110,7 +110,8 @@ function getEndpointDataGetters(connectInfo, endpoints) {
   return dataGetters;
 }
 
-export function getFitbitData(connectInfo, endpoints, user, accu) {
+export function getFitbitData(connectInfo, reqrInfo, user, accu) {
+  var endpoints = reqrInfo.endpoints;
   var endpointDataGetters = getEndpointDataGetters(connectInfo, endpoints);
   if (accu >= 5) {
     throw('Too many calls');
@@ -118,7 +119,7 @@ export function getFitbitData(connectInfo, endpoints, user, accu) {
     accu = accu || 0;
     return new Promise(function(resolve, reject) {
       Promise.all(endpointDataGetters.map(endpointDataGetter => endpointDataGetter(connectInfo, user)))
-      .then(handleErrors(connectInfo, endpoints, user, accu))
+      .then(handleErrors(connectInfo, endpoints, user, reqrInfo, accu))
       .then(result => {
         resolve(result);
       })
