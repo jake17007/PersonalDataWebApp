@@ -40,18 +40,8 @@
           </a>
         </h3>
 
-        <!--
-        Facebook
-        <button type="button" class="btn btn-secondary">Connect</button>
-        Fitbit
-        <button type="button" class="btn btn-secondary">Connect</button>
-        Moves
-        <button type="button" class="btn btn-secondary">Connect</button>
-      -->
-
-
         <ul class="list-group" ng-repeat="connection in dashboardCtrl.myConnections">
-          <li class="list-group-item">{{connection.provider}}</li>
+          <li class="list-group-item">{{connection.label}}</li>
         </ul>
 
     </div>

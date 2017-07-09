@@ -16,28 +16,30 @@ import {handleErrors} from './handleErrors/handleErrors'
  */
 function handleMissingConnections(appAndUserData) {
   return new Promise(function(resolve, reject) {
+
     // Get the required and connected providers
-    var requiredProviders = _.map(appAndUserData.app.thirdPartyApiRequirements, 'provider');
-    var userConnections = _.map(appAndUserData.user.connections, 'provider');
+    var requiredProviders = _.map(appAndUserData.app.thirdPartyApiRequirements, 'thirdPartyApi._id');
+    var userConnections = _.map(appAndUserData.user.connections, 'thirdPartyApi');
+
     // Check for each required provided
     var missingConnections = [];
     requiredProviders.forEach(reqr => {
       var found = userConnections.find(conn => {
-        return conn === reqr;
+        return conn.equals(reqr);
       });
       if (!found) missingConnections.push(reqr);
     });
     // Return the missing connections if there are any
-    if (missingConnections.length) reject(Error('Missing Connections: ', missingConnections));
+    if (missingConnections.length) reject(missingConnections);
     resolve('success');
   });
 }
 
 
 
-export function getConnectInfoByProvider(user, providerName) {
+export function getConnectInfoByThirdPartyApi(user, thirdPartyApi) {
   return user.connections.filter(connection => {
-    return connection.provider === providerName;
+    return connection.thirdPartyApi.equals(thirdPartyApi._id);
   })[0];
 }
 
@@ -59,7 +61,7 @@ function aggregateDataGetters(appAndUserData) {
     var connectInfo;
     appAndUserData.app.thirdPartyApiRequirements.forEach(reqrInfo => {
       // Get just the connection info for this provider
-      connectInfo = getConnectInfoByProvider(appAndUserData.user, reqrInfo.provider);
+      connectInfo = getConnectInfoByThirdPartyApi(appAndUserData.user, reqrInfo.thirdPartyApi);
       // Get the dataGetters
       dataGetters = dataGetters.concat(fetchDataGettersByProvider(connectInfo, reqrInfo, appAndUserData.user));
     });
@@ -123,7 +125,7 @@ function wrapWithProviderLabels(appAndUserData) {
     var requiredApis = appAndUserData.app.thirdPartyApiRequirements;
     var labeledData = [];
     for (var i = 0; i < requiredApis.length; i++) {
-      labeledData.push({[requiredApis[i].provider]: returnedData[i]});
+      labeledData.push({[requiredApis[i].thirdPartyApi.provider]: returnedData[i]});
     }
     return labeledData
     //return returnedData;

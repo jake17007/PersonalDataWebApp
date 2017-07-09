@@ -10,10 +10,10 @@ import * from './moves';
 import * from './twothreeandme';
 */
 export function fetchDataGettersByProvider(connectInfo, reqrInfo, user) {
-  if (reqrInfo.provider === 'fitbit') {
+  if (reqrInfo.thirdPartyApi.provider === 'fitbit') {
     return getFitbitData(connectInfo, reqrInfo.endpoints, user);
   }
-  if (reqrInfo.provider === 'moves') {
+  if (reqrInfo.thirdPartyApi.provider === 'moves') {
     return getMovesData(connectInfo, reqrInfo.endpoints, user);
   }
   /*

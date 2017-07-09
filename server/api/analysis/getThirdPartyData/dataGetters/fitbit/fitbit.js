@@ -120,7 +120,6 @@ export function getFitbitData(connectInfo, endpoints, user, accu) {
       Promise.all(endpointDataGetters.map(endpointDataGetter => endpointDataGetter(connectInfo, user)))
       .then(handleErrors(connectInfo, endpoints, user, accu))
       .then(result => {
-        console.log('result: ', result);
         resolve(result);
       })
       .catch(err => {

@@ -26,12 +26,12 @@ export class CreateNewAppComponent {
     // Get all available third party api connections
     this.$http.get('/api/thirdPartyApis')
     .then(res => {
-      console.log(res);
       this.thirdPartyApis = res.data;
       // Add a 'collapsed' boolean to each provider for form control
-      this.thirdPartyApis.forEach(provider => {
-        provider.collapsed = true;
+      this.thirdPartyApis.forEach(thirdPartyApi => {
+        thirdPartyApi.collapsed = true;
       });
+      console.log(this.thirdPartyApis);
     })
     .catch(err => {
       console.log(err);
@@ -41,30 +41,23 @@ export class CreateNewAppComponent {
   createNewAppSubmit() {
 
     // Format the requirements and store to the newApp
-    this.thirdPartyApis.forEach(provider => {
-      if (provider.required) {
+    this.thirdPartyApis.forEach(thirdPartyApi => {
+      if (thirdPartyApi.required) {
 
         // The provider info
-        var requiredProvider = {
-          provider: provider.provider,
-          label: provider.label,
+        var requiredThirdPartyApi = {
+          thirdPartyApi: thirdPartyApi._id,
           endpoints: []
         };
 
         // The endpoints info
-        provider.endpoints.forEach(endpoint => {
+        thirdPartyApi.endpoints.forEach(endpoint => {
           if (endpoint.required) {
-            var requiredEndpoint = {
-              name: endpoint.name,
-              label: endpoint.label,
-              requiredScopes: endpoint.requiredScopes
-            };
-
-            requiredProvider.endpoints.push(requiredEndpoint);
+            requiredThirdPartyApi.endpoints.push(endpoint._id);
           }
         });
 
-        this.newApp.thirdPartyApiRequirements.push(requiredProvider)
+        this.newApp.thirdPartyApiRequirements.push(requiredThirdPartyApi);
 
       }
     });

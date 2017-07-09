@@ -8,8 +8,7 @@ export var AnalysisSchema = new mongoose.Schema({
   githubLink: String,
   description: String,
   thirdPartyApiRequirements: [{
-    thirdPartyApi: {type: Schema.Types.ObjectId, ref: 'Analysis'},
-    label: String,
+    thirdPartyApi: {type: Schema.Types.ObjectId, ref: 'ThirdPartyApi'},
     endpoints: [{type: Schema.Types.ObjectId, ref: 'Endpoint'}]
   }]
 });

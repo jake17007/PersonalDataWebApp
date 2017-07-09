@@ -22,21 +22,14 @@ export class DashboardComponent {
   }
 
   $onInit() {
-    this.$http.get('api/analyses/user/myFavoriteApps')
-    .then(response => {
-      this.favoriteApps = response.data;
+    this.$http.get('api/users/get/myDashboardInfo')
+    .then(user => {
+      this.favoriteApps = user.data.favoriteApps;
+      this.myConnections = user.data.connections;
     })
     .catch(err => {
       console.log(err);
     });
-
-    this.$http.get('api/users/connections')
-    .then(response => {
-      this.myConnections = response.data.connections;
-    })
-    .catch(err => {
-      console.log(err);
-    })
   }
 
   viewUserAppView(theAppId, theAppName) {
@@ -44,6 +37,7 @@ export class DashboardComponent {
   }
 
   removeFromFavorites(app) {
+    console.log(JSON.stringify(app, null, 2));
     this.$http.put(`api/users/removeAppFromFavorites/${app._id}`)
     .then(() => {
       return this.$http.get('api/analyses/user/myFavoriteApps');

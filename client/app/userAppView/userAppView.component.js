@@ -21,7 +21,6 @@ export class UserAppViewComponent {
   $onInit() {
     this.$http.get(`/api/analyses/runApp/${this.appId}`)
       .then(response => {
-        console.log('this ran mofo');
         console.log('heres the respnse.data.html: ', response.data.html);
         this.appOutput = this.$sce.trustAsHtml(response.data.html);
         console.log('heres the html: ', this.appOutput);

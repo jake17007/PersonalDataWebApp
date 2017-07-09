@@ -42,19 +42,22 @@ export class EditOwnedAppComponent {
       this.thirdPartyApis.forEach(provider => {
         provider.collapsed = true;
       });
-      // Check (as in, mark the checkbox true) the currently required apis according to appUnchanged
+
+      console.log(JSON.stringify(this.appWithChanges.thirdPartyApiRequirements, null, 2))
+      console.log(JSON.stringify(this.thirdPartyApis, null, 2))
+
       this.appWithChanges.thirdPartyApiRequirements.forEach(apiOriginal => {
         this.thirdPartyApis.forEach(apiEdit => {
-          if (apiEdit.provider === apiOriginal.provider) {
+          if (apiEdit._id == apiOriginal.thirdPartyApi._id) {
             apiEdit.required = true;
-            apiOriginal.endpoints.forEach(endpointOriginal => {
-              apiEdit.endpoints.forEach(endpointEdit => {
-                if (endpointEdit.name === endpointOriginal.name) {
-                  endpointEdit.required = true;
-                }
-              });
-            });
           }
+          apiOriginal.endpoints.forEach(endpointOriginal => {
+            apiEdit.endpoints.forEach(endpointEdit => {
+              if (endpointEdit._id == endpointOriginal._id) {
+                endpointEdit.required = true;
+              }
+            });
+          });
         });
       });
     })
@@ -125,29 +128,23 @@ export class EditOwnedAppComponent {
     /********/
     this.appWithChanges.thirdPartyApiRequirements = [];
     // Format the requirements and store to the newApp
-    this.thirdPartyApis.forEach(provider => {
-      if (provider.required) {
+    this.thirdPartyApis.forEach(thirdPartyApi => {
+      if (thirdPartyApi.required) {
 
         // The provider info
-        var requiredProvider = {
-          provider: provider.provider,
-          label: provider.label,
+        var requiredThirdPartyApi = {
+          thirdPartyApi: thirdPartyApi._id,
           endpoints: []
         };
 
         // The endpoints info
-        provider.endpoints.forEach(endpoint => {
+        thirdPartyApi.endpoints.forEach(endpoint => {
           if (endpoint.required) {
-            var requiredEndpoint = {
-              name: endpoint.name,
-              label: endpoint.label,
-              requiredScopes: endpoint.requiredScopes
-            };
-
-            requiredProvider.endpoints.push(requiredEndpoint);
+            requiredThirdPartyApi.endpoints.push(endpoint._id);
           }
         });
-        this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
+
+        this.appWithChanges.thirdPartyApiRequirements.push(requiredThirdPartyApi);
       }
     });
     /*********/
@@ -173,29 +170,23 @@ export class EditOwnedAppComponent {
     /********/
     this.appWithChanges.thirdPartyApiRequirements = [];
     // Format the requirements and store to the newApp
-    this.thirdPartyApis.forEach(provider => {
-      if (provider.required) {
+    this.thirdPartyApis.forEach(thirdPartyApi => {
+      if (thirdPartyApi.required) {
 
         // The provider info
-        var requiredProvider = {
-          provider: provider.provider,
-          label: provider.label,
+        var requiredThirdPartyApi = {
+          thirdPartyApi: thirdPartyApi,
           endpoints: []
         };
 
         // The endpoints info
-        provider.endpoints.forEach(endpoint => {
+        thirdPartyApi.endpoints.forEach(endpoint => {
           if (endpoint.required) {
-            var requiredEndpoint = {
-              name: endpoint.name,
-              label: endpoint.label,
-              requiredScopes: endpoint.requiredScopes
-            };
-
-            requiredProvider.endpoints.push(requiredEndpoint);
+            requiredThirdPartyApi.endpoints.push(endpoint);
           }
         });
-        this.appWithChanges.thirdPartyApiRequirements.push(requiredProvider)
+
+        this.appWithChanges.thirdPartyApiRequirements.push(requiredThirdPartyApi);
       }
     });
     /*********/

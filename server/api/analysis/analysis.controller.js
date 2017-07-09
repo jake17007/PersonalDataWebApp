@@ -222,7 +222,10 @@ export function index(req, res) {
 
 // Gets a single Analysis from the DB
 export function show(req, res) {
-  return Analysis.findById(req.params.id).exec()
+  return Analysis.findById(req.params.id)
+    .populate('thirdPartyApiRequirements.thirdPartyApi')
+    .populate('thirdPartyApiRequirements.endpoints')
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -230,7 +233,7 @@ export function show(req, res) {
 
 // Creates a new Analysis in the DB
 export function create(req, res) {
-  req.body['ownerId'] = req.user._id;
+  req.body['owner'] = req.user._id;
   return Analysis.create(req.body)
     .then(newApp => {
       return User.findByIdAndUpdate(req.user._id, {$push: {'ownedAppIds': newApp._id}}).exec();
@@ -286,7 +289,10 @@ export function destroy(req, res) {
  */
 export function runApp(req, res) {
   return Promise.all([
-    Analysis.findById(req.params.appId).exec(),
+    Analysis.findById(req.params.appId)
+    .populate('thirdPartyApiRequirements.thirdPartyApi')
+    .populate('thirdPartyApiRequirements.endpoints')
+    .exec(),
     User.findById(req.user._id).exec()
   ])
   //.then(getProviderAccessInfo())
@@ -325,7 +331,7 @@ export function runApp(req, res) {
 
 // Gets a list of all the given user's apps they own
 export function getMyOwnedApps(req, res) {
-  return Analysis.find({ownerId: req.user._id}).exec()
+  return Analysis.find({owner: req.user._id}).exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }

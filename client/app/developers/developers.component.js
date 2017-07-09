@@ -19,7 +19,6 @@ export class DevelopersComponent {
   $onInit() {
     this.$http.get('/api/analyses/developers/myOwnedApps')
       .then(response => {
-        console.log('this is the response: ', response);
         this.myApps = response.data;
       });
   }

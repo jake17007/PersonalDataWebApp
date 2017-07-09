@@ -3,6 +3,7 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import _ from 'lodash';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -114,7 +115,7 @@ export function addAppToUsersFavorites(req, res) {
   console.log('this is the appId: ', appIdToAdd);
   return User.findById(userId).exec()
     .then(user => {
-      if (user['favoriteApps'].filter(function(appId) {return appId === appIdToAdd;}).length <= 0) {
+      if (user['favoriteApps'].filter(function(appId) {return appId.equals(appIdToAdd);}).length <= 0) {
         user['favoriteApps'].push(appIdToAdd);
       }
       return user.save()
@@ -141,7 +142,7 @@ export function removeAppFromFavorites(req, res) {
     })
     .then(user => {
       var favoriteAppsWithoutRemoved = user['favoriteApps'].filter(function(appId) {
-        return appId !== appIdToRemove;
+        return !appId.equals(appIdToRemove);
       });
       console.log('here is the new array: ', favoriteAppsWithoutRemoved);
       user.favoriteApps = favoriteAppsWithoutRemoved;
@@ -160,11 +161,37 @@ export function removeAppFromFavorites(req, res) {
 export function me(req, res, next) {
   var userId = req.user._id;
 
-  return User.findOne({ _id: userId }, '-salt -password').exec()
+  return User.findOne({ _id: userId }, '-salt -password')
+    .populate('connections')
+    .exec()
     .then(user => { // don't ever give out the password or salt
       if(!user) {
         return res.status(401).end();
       }
+      res.json(user);
+    })
+    .catch(err => next(err));
+}
+
+/**
+ * Get my info required for My Dashboard
+ */
+export function myDashboardInfo(req, res, next) {
+  var userId = req.user._id;
+
+  return User.findOne({ _id: userId }, '-salt -password')
+    .populate('connections.thirdPartyApi', 'label')
+    .populate('favoriteApps')
+    .lean()
+    .exec()
+    .then(user => { // don't ever give out the password or salt
+      if(!user) {
+        return res.status(401).end();
+      }
+      user.connections = _.map(user.connections, function(connection) {
+        return connection.thirdPartyApi;
+      });
+      console.log(user.connections);
       res.json(user);
     })
     .catch(err => next(err));

@@ -12,7 +12,7 @@ export class AppDetailsComponent {
   userHasRequiredConnections = false;
 
   /*@ngInject*/
-  constructor($scope, $stateParams, $http, $state, refreshStore) {
+  constructor($scope, $stateParams, $http, $state, refreshStore, socket) {
     // Get possible refresh data
     if ($stateParams.app) this.app = $stateParams.app;
     else this.app = refreshStore.getCookieData().app;
@@ -21,25 +21,44 @@ export class AppDetailsComponent {
     this.$scope = $scope;
     this.$http = $http;
     this.$state = $state;
+    this.socket = socket;
   }
 
   $onInit() {
 
-    // Get the current user and indicated whether this is the owner of the app or not
-    this.$http.get('/api/users/me')
-    .then(user => {
-
+    this.$http.get(`/api/analyses/${this.app._id}`)
+    .then(result => {
+      this.app = result.data;
+    })
+    .then(() => {
+      return this.$http.get('/api/users/me')
+        .catch(err => {throw(err);});
+    })
+    .then(result => {
+      this.user = result.data;
+    })
+    .then(() => {
       // Populate the requirements for the app
       this.app.thirdPartyApiRequirements.forEach(requirement => {
         this.requirements.push(requirement);
       });
 
       // Indicate whether this is the owner of the app or not
-      var user = user.data;
-      if (this.app.ownerId == user._id) {
+      if (this.app.owner == this.user._id) {
         this.userIsOwner = true;
       }
 
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+      //console.log(JSON.stringify(this.app, null, 3));
+
+      //console.log(JSON.stringify(user, null, 3));
+
+
+      /*
       // Add an element to the requirements array indicating whether the user has the given connection
       this.requirements.forEach(requirement => {
         var userHasConnection = user.connections.filter(connection => {
@@ -49,14 +68,7 @@ export class AppDetailsComponent {
         if (userHasConnection) {
 
         }
-
-      })
-    })
-    .catch(function(err){
-      console.log(err);
-    });
-
-
+        */
   }
 
   addAppToUsersFavorites() {
