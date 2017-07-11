@@ -31,6 +31,7 @@ function handleMissingConnections(appAndUserData) {
     });
     // Return the missing connections if there are any
     if (missingConnections.length) reject(missingConnections);
+    console.log('From handleMissingConnections it was successful, appAndUserData: ', appAndUserData);
     resolve('success');
   });
 }
@@ -106,7 +107,7 @@ function getRequiredConnectionInfo(appAndUserData) {
 function runDataGetters(appAndUserData) {
   return function(dataGetters) {
     var userRequiredApiInfo = getRequiredConnectionInfo(appAndUserData);
-    console.log(dataGetters);
+
     return new Promise(function(resolve, reject) {
       return Promise.all(dataGetters)
       .then(returnedData => {

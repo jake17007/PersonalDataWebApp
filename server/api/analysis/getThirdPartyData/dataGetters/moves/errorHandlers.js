@@ -61,7 +61,7 @@ function handleExpiredToken(connectInfo, endpoints, user, reqrInfo, accu) {
     connectInfo = getConnectInfoByThirdPartyApi(userUpdated, reqrInfo.thirdPartyApi._id);
     console.log('userUpdated: ', userUpdated);
     accu++;
-    return getMovesData(connectInfo, endpoints, userUpdated, accu);
+    return getMovesData(connectInfo, reqrInfo, userUpdated, accu);
   })
   .catch(err => {
     throw(err);

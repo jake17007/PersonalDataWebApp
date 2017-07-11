@@ -51,8 +51,8 @@ function handleExpiredToken(connectInfo, endpoints, user, reqrInfo, accu) {
   return refreshAccessToken(connectInfo, user)
   .then(userUpdated => {
     accu++;
-    var connectInfoUpdated = getConnectInfoByThirdPartyApi(userUpdated, reqrInfo.thirdPartyApi._id);
-    return getFitbitData(connectInfoUpdated, endpoints, userUpdated, accu);
+    var connectInfoUpdated = getConnectInfoByThirdPartyApi(userUpdated, reqrInfo.thirdPartyApi);
+    return getFitbitData(connectInfoUpdated, reqrInfo, userUpdated, accu);
   })
   .catch(err => {
     throw(err);

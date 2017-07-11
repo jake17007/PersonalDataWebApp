@@ -7,85 +7,6 @@ import User from '../../api/user/user.model';
 import ThirdPartyApi from '../../api/thirdPartyApi/thirdPartyApi.model';
 import _ from 'lodash';
 
-/*
-// Returns the updated user
-export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
-  var oldConnectionId;
-  // Look for an old connection
-  User.findOne(
-    {'_id': userId, 'connections.thirdPartyApi.provider': },
-    {'connections.$': 1},
-    function(err, user) {
-      if (err) {
-        return err;
-      }
-      if (!user) {
-        User.findOne(
-          {'_id': userId},
-          function(err, user) {
-            if (err) {
-              return err;
-            }
-            var newConnection = {
-              provider: provider,
-              accessToken: accessToken,
-              refreshToken: refreshToken,
-              providerUserId: providerUserId
-            };
-            user.connections.push(newConnection);
-            // Save the user
-            user.save(function(err, user) {
-              if (err) {
-                callback(err);
-              }
-              callback(null, user);
-            });
-          }
-        )
-      } else {
-        // Grab the old connection id
-        oldConnectionId = user.connections[0]._id;
-        // Gab the whole user
-        User.findOne(
-          {'_id': userId},
-          function(err, user) {
-            if (err) {
-              return error;
-            }
-            // Remove the old connection
-            user.connections.id(oldConnectionId).remove();
-            // Save the user
-            user.save(function(err, user){
-              if (err) {
-                return err;
-              }
-              User.findOne(
-                {'_id': userId},
-                function(err, user) {
-                  var newConnection = {
-                    provider: provider,
-                    accessToken: accessToken,
-                    refreshToken: refreshToken,
-                    providerUserId: providerUserId
-                  };
-                  user.connections.push(newConnection);
-                  // Save the user
-                  user.save(function(err, user) {
-                    if (err) {
-                      callback(err);
-                    }
-                    callback(null, user);
-                  });
-                }
-              )
-            });
-          }
-        )
-      }
-    }
-  )
-}
-*/
 // Returns the updated user
 export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
   console.log('this ran');
@@ -112,8 +33,7 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
     }
     var oldConnection = _.find(user.connections, {thirdPartyApi: thirdPartyApi._id})
     if (oldConnection) {
-      var oldConnectionId = oldConnection._id;
-      user.connections.id(oldConnectionId).remove();
+      user.connections.id(oldConnection._id).remove();
     }
     //_.remove(user.connections, {thirdPartyApi: thirdPartyApi._id});
     console.log('after removal');

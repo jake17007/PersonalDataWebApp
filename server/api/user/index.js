@@ -17,5 +17,6 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/removeAppFromFavorites/:appId', auth.isAuthenticated(), controller.removeAppFromFavorites);
 router.get('/connections', auth.isAuthenticated(), controller.connections);
 router.get('/get/myDashboardInfo', auth.isAuthenticated(), controller.myDashboardInfo);
+router.post('/humanApiConnect/finish', auth.isAuthenticated(), controller.humanApiConnectFinish);
 
 module.exports = router;

@@ -68,6 +68,18 @@ var all = {
     clientID: process.env.MOVES_ID || 'id',
     clientSecret: process.env.MOVES_SECRET || 'secret',
     callbackURL: `${process.env.DOMAIN || ''}/auth/connect/moves/callback`
+  },
+
+  humanApi: {
+    clientID: process.env.HUMANAPI_ID || 'id',
+    clientSecret: process.env.HUMANAPI_SECRET || 'secret',
+    appKey: process.env.HUMANAPI_APPKEY || 'appKey'
+  },
+
+  withings: {
+    clientID: process.env.WITHINGS_CONSUMER_KEY || 'id',
+    clientSecret: process.env.WITHINGS_CONSUMER_SECRET || 'secret',
+    callbackURL: `${process.env.DOMAIN || ''}/auth/connect/withings/callback`
   }
 };
 

@@ -17,6 +17,7 @@ export function buildApp(appAndUserData) {
     // Pull the app's source code from Github and save it in 'nodegit'
     Git.Clone(appAndUserData.app.githubLink, 'nodegit')
     .then(repository => {
+      console.log('Building the app was successful.');
       resolve('build successful');
     })
     .catch(err => {

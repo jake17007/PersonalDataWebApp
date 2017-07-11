@@ -4,6 +4,7 @@ import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
+import request from 'request';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -222,4 +223,39 @@ export function connections(req, res, next) {
       res.json(result);
     })
     .catch(err => next(err));
+}
+
+export function humanApiConnectFinish(req, res, next) {
+  var userId = req.user._id;
+  var sessionTokenObject = req.body;
+  sessionTokenObject.clientSecret = config.humanApi.clientSecret;
+
+  console.log('Request from humanApiConnectFinish: ', req);
+  console.log('sessionTokenObject: ', sessionTokenObject);
+
+  return request({
+    method: 'POST',
+    uri: 'https://user.humanapi.co/v1/connect/tokens',
+    json: sessionTokenObject
+  }, function(err, resp, body) {
+      if(err) return res.send(422);
+      // at this point if request was successfull body object
+      // will have `accessToken`, `publicToken` and `humanId` associated in it.
+      var humanApiConnectionInfo = {
+        accessToken: body.accessToken,
+        publicToken: body.publicToken,
+        humanId: body.humanId,
+        availableScopes: []
+      }
+      // You should store these fields in your system in association to user's data.
+      return User.findById(userId).exec()
+        .then(user => {
+          user.humanApiConnection = humanApiConnectionInfo;
+          return user.save()
+          .then(() => {
+            res.status(201).end();
+          })
+          .catch(handleError(res));
+      });
+  });
 }

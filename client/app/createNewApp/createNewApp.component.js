@@ -68,6 +68,9 @@ export class CreateNewAppComponent {
       // Show success modal that goes to developers page
       this.confirmCreated(this.newApp.name);
     })
+    .catch(err => {
+      throw(err);
+    });
   }
 
 
