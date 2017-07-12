@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 // Returns the updated user
 export function upsertConnection(provider, userId, accessToken, refreshToken, providerUserId, callback){
-  console.log('this ran');
+  //console.log('this ran');
   Promise.all([
     ThirdPartyApi.findOne({'provider': provider}).exec(),
     User.findById(userId).exec()
@@ -22,8 +22,8 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
   .then(result => {
     var thirdPartyApi = result[0];
     var user = result[1];
-    console.log('before edit');
-    console.log(JSON.stringify(user, null, 2));
+    //console.log('before edit');
+    //console.log(JSON.stringify(user, null, 2));
     var newConnection = {
       accessToken: accessToken,
       refreshToken: refreshToken,
@@ -36,11 +36,11 @@ export function upsertConnection(provider, userId, accessToken, refreshToken, pr
       user.connections.id(oldConnection._id).remove();
     }
     //_.remove(user.connections, {thirdPartyApi: thirdPartyApi._id});
-    console.log('after removal');
-    console.log(JSON.stringify(user, null, 2));
+    //console.log('after removal');
+    //console.log(JSON.stringify(user, null, 2));
     user.connections.push(newConnection);
-    console.log('after push');
-    console.log(JSON.stringify(user, null, 2));
+    //console.log('after push');
+    //console.log(JSON.stringify(user, null, 2));
     user.save()
       .then(savedUser => callback(null, savedUser))
       .catch(err => callback(err));

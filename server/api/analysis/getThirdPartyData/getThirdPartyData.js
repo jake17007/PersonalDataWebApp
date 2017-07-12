@@ -31,7 +31,6 @@ function handleMissingConnections(appAndUserData) {
     });
     // Return the missing connections if there are any
     if (missingConnections.length) reject(missingConnections);
-    console.log('From handleMissingConnections it was successful, appAndUserData: ', appAndUserData);
     resolve('success');
   });
 }

@@ -411,7 +411,7 @@ var withingsEndpoints = [
 console.log('fitbitEndpoints.length: ', fitbitEndpoints.length);
 
 var fitbitEndpointIds = [];
-
+*/
 function createEndpoint(endpoint) {
   return new Promise(function(resolve, reject) {
     Endpoint.create(endpoint)
@@ -424,8 +424,8 @@ function createEndpoint(endpoint) {
   });
 }
 
-function endpointAdders(fitbitEndpoints) {
-  return _.map(fitbitEndpoints, createEndpoint);
+function endpointAdders(endpoints) {
+  return _.map(endpoints, createEndpoint);
 }
 
 function createEndpoints(endpoints) {
@@ -433,7 +433,7 @@ function createEndpoints(endpoints) {
     return Promise.all(endpointAdders(endpoints));
   }
 }
-
+/*
 Endpoint.find({}).remove()
   .then(createEndpoints(fitbitEndpoints))
   .then(ids => {
@@ -469,5 +469,91 @@ ThirdPartyApi.create({
   provider: 'withings',
   label: 'Withings',
   endpoints: null
+});
+*/
+/*
+var withingsEndpoints = [
+  {
+    name: 'getactivity',
+    label: 'Measure - Get Activity Measures',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_activity',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }, {
+    name: 'getmeas',
+    label: 'Measure - Get Body Measures',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_measure',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }, {
+    name: 'getintradayactivity',
+    label: 'Measure - Get Intraday Activity',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_intraday_measure',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }, {
+    name: 'get',
+    label: 'Measure - Get Sleep Measures',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_sleep',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }, {
+    name: 'getsummary',
+    label: 'Measure - Get Sleep Summary',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_sleep_summary',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }, {
+    name: 'getworkouts',
+    label: 'Measure - Get Workouts',
+    documentationLink: 'https://developer.health.nokia.com/api/doc#api-Measure-get_workouts',
+    requiredScopes: [
+
+    ],
+    description: ''
+  }
+];
+*/
+/*
+Promise.all(endpointAdders(withingsEndpoints))
+.then(ids => {
+  ThirdPartyApi.find({provider: 'withings'}).exec()
+  .then(thirdPartyApi => {
+    thirdPartyApi.endpoints.push(ids);
+    thirdPartyApi.save()
+      .then(savedThirdPartyApi => {
+        console.log(JSON.stringify(savedThirdPartyApi, null, 2));
+      });
+    });
+  })
+  .catch(err => {
+    throw(err);
+  });
+*/
+/*
+Endpoint.find({documentationLink: new RegExp('nokia')}).exec()
+.then(withingsEndpoints => {
+  var ids = _.map(withingsEndpoints, '_id');
+  ThirdPartyApi.find({provider: 'withings'}).remove()
+  .then(() => {
+    ThirdPartyApi.create({
+      provider: 'withings',
+      label: 'Withings',
+      endpoints: ids
+    });
+  });
+})
+.catch(err => {
+  throw(err);
 });
 */

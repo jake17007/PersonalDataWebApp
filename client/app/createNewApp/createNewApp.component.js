@@ -31,7 +31,9 @@ export class CreateNewAppComponent {
       this.thirdPartyApis.forEach(thirdPartyApi => {
         thirdPartyApi.collapsed = true;
       });
-      console.log(this.thirdPartyApis);
+
+      // Excluding Withings until it gets fixed
+      this.thirdPartyApis = _.pull(this.thirdPartyApis, _.find(this.thirdPartyApis, {_id: '5964fa44f179593a0fd7f441'}));
     })
     .catch(err => {
       console.log(err);

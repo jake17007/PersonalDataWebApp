@@ -295,8 +295,6 @@ export function runApp(req, res) {
     .exec(),
     User.findById(req.user._id).exec()
   ])
-  //.then(getProviderAccessInfo())
-  //.then(handleConnectionNotFound(res))
   .then(result => {
     var appAndUserData = {
       app: result[0],

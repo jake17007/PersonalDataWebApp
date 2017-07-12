@@ -43,8 +43,8 @@ export class EditOwnedAppComponent {
         provider.collapsed = true;
       });
 
-      console.log(JSON.stringify(this.appWithChanges.thirdPartyApiRequirements, null, 2))
-      console.log(JSON.stringify(this.thirdPartyApis, null, 2))
+      // Excluding Withings until it gets fixed
+      this.thirdPartyApis = _.pull(this.thirdPartyApis, _.find(this.thirdPartyApis, {_id: '5964fa44f179593a0fd7f441'}));
 
       this.appWithChanges.thirdPartyApiRequirements.forEach(apiOriginal => {
         this.thirdPartyApis.forEach(apiEdit => {
