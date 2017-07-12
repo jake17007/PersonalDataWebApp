@@ -80,6 +80,12 @@ var all = {
     clientID: process.env.WITHINGS_CONSUMER_KEY || 'id',
     clientSecret: process.env.WITHINGS_CONSUMER_SECRET || 'secret',
     callbackURL: `${process.env.DOMAIN || ''}/auth/connect/withings/callback`
+  },
+
+  youtube: {
+    clientID: process.env.YOUTUBE_ID || 'id',
+    clientSecret: process.env.YOUTUBE_SECRET || 'secret',
+    callbackURL: `${process.env.DOMAIN || ''}/auth/connect/youtube/callback`
   }
 };
 

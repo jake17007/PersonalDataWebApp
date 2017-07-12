@@ -557,3 +557,16 @@ Endpoint.find({documentationLink: new RegExp('nokia')}).exec()
   throw(err);
 });
 */
+/*
+ThirdPartyApi.create({
+  provider: 'youtube',
+  label: 'YouTube',
+  endpoints: []
+})
+.then(result => {
+  console.log('result: ', result);
+})
+.catch(err => {
+  throw(err);
+})
+*/

@@ -20,6 +20,8 @@ export class ConnectComponent {
     this.$http.get('/api/thirdPartyApis')
     .then(thirdPartyApis => {
       this.thirdPartyApis = thirdPartyApis.data;
+      // Excluding Withings until it gets fixed
+      this.thirdPartyApis = _.pull(this.thirdPartyApis, _.find(this.thirdPartyApis, {_id: '5964fa44f179593a0fd7f441'}));
     })
     .catch(err => {
       throw(err);
