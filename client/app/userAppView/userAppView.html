@@ -1,5 +1,10 @@
 <div class="container">
   <h1>{{userAppViewCtrl.appName}}</h1>
+  <div class='text-center'>
+    <div ng-show="userAppViewCtrl.loading" id="loadingWheel">
+      <img src="../assets/images/loadingWheel.gif" alt="loading wheel">
+    </div>
+  </div>
   <div ng-bind-html=userAppViewCtrl.appOutput></div>
   <div ng-show="userAppViewCtrl.missingConnections">These connections are required for this app and have not been established for you account:</div></br>
   <ul ng-repeat="connection in userAppViewCtrl.missingConnections">

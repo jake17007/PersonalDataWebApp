@@ -16,20 +16,19 @@ export class UserAppViewComponent {
     this.appName = $stateParams.appName;
     this.$http = $http;
     this.$sce = $sce;
+    this.loading = true;
   }
 
   $onInit() {
     this.$http.get(`/api/analyses/runApp/${this.appId}`)
       .then(response => {
-        console.log('heres the respnse.data.html: ', response.data.html);
+        this.loading = false;
         this.appOutput = this.$sce.trustAsHtml(response.data.html);
-        console.log('heres the html: ', this.appOutput);
       })
       .catch(err => {
-        if (err.data) {
-          console.log(err.data);
-          this.missingConnections = err.data;
-        }
+        this.loading = false;
+        throw(err.data);
+        this.missingConnections = err.data;
       });
   }
 
