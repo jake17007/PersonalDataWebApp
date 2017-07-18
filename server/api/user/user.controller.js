@@ -5,6 +5,7 @@ import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import request from 'request';
+var ObjectId = require('mongodb').ObjectID;
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -258,4 +259,19 @@ export function humanApiConnectFinish(req, res, next) {
           .catch(handleError(res));
       });
   });
+}
+
+export function removeConnection(req, res) {
+  return User.findById(req.user._id).exec()
+    .then(user => {
+      var connectionToRemove = _.find(user.connections, {thirdPartyApi: ObjectId(req.params.id)});
+      if (connectionToRemove) {
+        user.connections.id(connectionToRemove._id).remove();
+      }
+      return user.save()
+    })
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(handleError(res));
 }

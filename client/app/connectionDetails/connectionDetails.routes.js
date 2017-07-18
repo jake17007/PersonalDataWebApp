@@ -5,6 +5,10 @@ export default function($stateProvider) {
   $stateProvider
     .state('connectionDetails', {
       url: '/connect/connectionDetails',
-      template: '<connection-details></connection-details>'
+      template: '<connection-details></connection-details>',
+      params: {
+        user: null,
+        thirdPartyApi: null
+      }
     });
 }

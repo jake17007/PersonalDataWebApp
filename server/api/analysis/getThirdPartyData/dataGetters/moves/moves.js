@@ -8,8 +8,18 @@ function getEndpointDataGetters(connectInfo, endpoints, accu) {
   var dataGetters = [];
   endpoints.forEach(endpoint => {
 
-    var date_from = '20170501'; // Temporary, implement current date later
-    var date_to = '20170525'; // Temporary, can implement options someday
+    // Get dates
+    var date_to = new Date();
+    date_to.setDate(date_to.getDate()-1);
+    var date_from = new Date();
+    date_from.setMonth(date_to.getMonth()-1);
+
+    // Format properly
+    date_from = date_from.toISOString().split('T')[0].replace(/-/g, '');
+    date_to = date_to.toISOString().split('T')[0].replace(/-/g, '');
+
+    //var date_from = '20170501'; // Temporary, implement current date later
+    //var date_to = '20170525'; // Temporary, can implement options someday
 
     if (endpoint.name === 'profile') {
       dataGetters.push(
@@ -109,7 +119,6 @@ export function getMovesData(connectInfo, reqrInfo, user, accu) {
         }
       })
       .then(result => {
-        console.log('result: ', result);
         resolve(result);
       })
       .catch(err => {

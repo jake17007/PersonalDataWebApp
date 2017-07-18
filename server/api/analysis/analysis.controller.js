@@ -220,6 +220,14 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
+export function indexForAppStorePage(req, res) {
+  return Analysis.find()
+  .populate('thirdPartyApiRequirements.thirdPartyApi')
+  .exec()
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+}
+
 // Gets a single Analysis from the DB
 export function show(req, res) {
   return Analysis.findById(req.params.id)

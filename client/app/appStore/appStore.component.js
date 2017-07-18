@@ -16,9 +16,19 @@ export class AppStoreComponent {
   }
 
   $onInit() {
-    this.$http.get('/api/analyses')
+    this.$http.get('/api/analyses/forAppStorePage/all')
       .then(response => {
         this.apps = response.data;
+
+
+        this.apps.forEach(app => {
+          var reqrString = '';
+          app.thirdPartyApiRequirements.forEach(reqr => {
+            reqrString += (reqr.thirdPartyApi.label + ', ');
+          })
+          reqrString = reqrString.replace(/,\s*$/, "");
+          app.reqrString = reqrString;
+        })
       });
   }
 

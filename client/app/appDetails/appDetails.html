@@ -1,11 +1,8 @@
 <div class="container">
   <div class="col-md-8 col-md-offset-2">
 
-    <h1 class="page-header">{{appDetailsCtrl.app.name}}
-      <div class="pull-right">
-        <a type="button" class="btn btn-default" ng-show="appDetailsCtrl.userIsOwner" ng-click="appDetailsCtrl.viewEditOwnedApp()">Edit App</a>
-        <a type="button" class="btn btn-primary" ng-click="appDetailsCtrl.addAppToUsersFavorites()">Use App</a>
-      </div>
+    <h1 class="page-header">
+        {{appDetailsCtrl.app.name}}
     </h1>
 
       {{appDetailsCtrl.app.description}}
@@ -15,11 +12,11 @@
     <ul class="list-group" ng-repeat="requirement in appDetailsCtrl.requirements">
       <li class="list-group-item">{{requirement.thirdPartyApi.label}}</li>
     </ul>
+    <hr>
+    <div class="pull-right">
+      <a type="button" class="btn btn-default" ng-show="appDetailsCtrl.userIsOwner" ng-click="appDetailsCtrl.viewEditOwnedApp()"><i class="glyphicon glyphicon-edit"></i>&nbsp&nbspEdit App</a>
+      <a type="button" class="btn btn-primary" ng-click="appDetailsCtrl.addAppToUsersFavorites()"><i class="glyphicon glyphicon-plus"></i>&nbsp&nbspUse App</a>
 
-
-
-
-
-
+  </div>
   </div>
 </div>

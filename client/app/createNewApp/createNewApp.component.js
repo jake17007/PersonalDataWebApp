@@ -79,16 +79,7 @@ export class CreateNewAppComponent {
   toggleDropdown(element) {
     element.collapsed = !element.collapsed;
   }
-/*
-  childrenChecked(api) {
-    if (api.endpoints.filter(endpoint => {
-      return endpoint.required === true;
-    }).length > 0) {
-      return true;
-    }
-    return false;
-  }
-*/
+
   checkOrUncheckParent(api) {
     if (api.endpoints.filter(endpoint => {
       return endpoint.required === true;

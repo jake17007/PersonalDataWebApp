@@ -1,11 +1,16 @@
-  <div class="container">
+<div class="container">
 
-    <div class="col-xs-12 col-md-8 col-md-offset-2">
-      <h1 class="page-header">Edit App: {{editOwnedAppCtrl.appUnchanged.name}}</h1>
-      <div class="row">
-        <div class="col-xs-12"
-          <form>
+  <div class="col-sm-12 col-md-8 col-md-offset-2">
 
+    <h1 class="page-header">
+      Edit App<small>&nbsp&nbsp&nbsp{{editOwnedAppCtrl.appUnchanged.name}}</small>
+    </h1>
+
+    <div class="row">
+      <div class="col-xs-12">
+
+        <form class="panel panel-default">
+          <div class="panel-body">
             <div class="form-group">
               <label for="appname">Name</label>
               <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="editOwnedAppCtrl.appWithChanges.name">
@@ -21,67 +26,55 @@
               <textarea type="text" class="form-control" id="description" ng-model="editOwnedAppCtrl.appWithChanges.description" placeholder='Example: "Shows correlations between how much you work and how many dates you go on."'></textarea>
             </div>
 
+            <div class="col-md-10 col-md-offset-1">
+              <h4 class="page-header"> Connection Data Requirements </h4>
+              <div class="form-group">
 
+                <div class="list-group list-group-root well">
 
-<!--
-                <h4 class="page-header"> Connection Data Requirements </h4>
-
-                <div ng-repeat="requirement in editOwnedAppCtrl.appWithChanges.thirdPartyApiRequirements | orderBy:'label'">
-                  <div class="row">
-                    <div class="form-group col-md-4">
-                      <input type="checkbox" class="pull-right" id="{{requirement.label}}" ng-model="requirement.required" />
-                      <label for="{{requirement.label}}" class="pull-left">{{requirement.label}}</label>
+                  <div ng-repeat="api in editOwnedAppCtrl.thirdPartyApis | orderBy:'label'">
+                    <div class="list-group-item">
+                      <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="editOwnedAppCtrl.toggleDropdown(api)"></a>{{api.label}}
+                      <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="editOwnedAppCtrl.checkOrUncheckChildren(api)"/>
                     </div>
-                  </div>
-                </div>
--->
-          <div class="col-md-10 col-md-offset-1">
-            <h4 class="page-header"> Connection Data Requirements </h4>
-            <div class="form-group">
 
-              <div class="list-group list-group-root well">
-
-                <div ng-repeat="api in editOwnedAppCtrl.thirdPartyApis | orderBy:'label'">
-                  <div class="list-group-item">
-                    <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="editOwnedAppCtrl.toggleDropdown(api)"></a>{{api.label}}
-                    <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="editOwnedAppCtrl.checkOrUncheckChildren(api)"/>
-                  </div>
-
-                  <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
-                    <div ng-repeat="endpoint in api.endpoints">
-                      <div class="list-group-item left-padding">
-                        <a href="{{endpoint.documentationLink}}" target="_blank">
-                          {{endpoint.label}}
-                        </a>
-                        <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="editOwnedAppCtrl.checkOrUncheckParent(api)"/>
+                    <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
+                      <div ng-repeat="endpoint in api.endpoints">
+                        <div class="list-group-item left-padding">
+                          <a href="{{endpoint.documentationLink}}" target="_blank">
+                            {{endpoint.label}}
+                          </a>
+                          <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="editOwnedAppCtrl.checkOrUncheckParent(api)"/>
+                        </div>
                       </div>
                     </div>
+
                   </div>
-
                 </div>
-              </div>
 
+              </div>
             </div>
           </div>
 
 
-            <div class="footer">
+        </form>
 
-              <div class="pull-left">
-                <button type="submit" class="btn btn-danger" ng-click="editOwnedAppCtrl.deleteApp()">Delete App</button>
-              </div>
-
-
-              <div class="pull-right">
-                <button type="submit" class="btn btn-default" ng-click="editOwnedAppCtrl.viewJson()">View JSON</button>
-                <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
-                <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.saveChanges()">Save</button>
-              </div>
-
-            </div>
-
-          </form>
+        <div class="pull-left">
+          <button type="submit" class="btn btn-danger" ng-click="editOwnedAppCtrl.deleteApp()"><i class="glyphicon glyphicon-trash"></i>&nbsp&nbspDelete App</button>
+          <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
         </div>
+
+
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" ui-sref="developerGuide"><i class="glyphicon glyphicon-question-sign"></i>&nbsp&nbsp
+            Help
+          </button>
+          <button type="submit" class="btn btn-default" ng-click="editOwnedAppCtrl.viewJson()">View JSON</button>
+          <button type="submit" class="btn btn-primary" ng-click="editOwnedAppCtrl.saveChanges()"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp&nbspSave</button>
+
+        </div>
+
       </div>
     </div>
   </div>
+</div>

@@ -33,25 +33,6 @@ export class UserAppViewComponent {
       });
   }
 
-/*
-  $onInit() {
-    this.$http.get(`/api/analyses/runApp/${this.appId}`)
-      .then(response => {
-        console.log('this ran mofo');
-        console.log('heres the respnse.data: ', response.data);
-        this.appOutput = this.$sce.trustAsHtml(response.data);
-        console.log(this.appOutput);
-        //this.appOutput = this.$sce.trustAsHtml(response.data);
-        //console.log('heres the html: ', this.appOutput);
-      })
-      .catch(err => {
-        if (err.data) {
-          //this.missingConnections = err.data;
-          console.log('err.data: ', err.data);
-        }
-      });
-  }
-*/
 }
 
 export default angular.module('hh7App.userAppView', [uiRouter])

@@ -52,23 +52,6 @@ export class AppDetailsComponent {
     .catch(err => {
       console.log(err);
     });
-
-      //console.log(JSON.stringify(this.app, null, 3));
-
-      //console.log(JSON.stringify(user, null, 3));
-
-
-      /*
-      // Add an element to the requirements array indicating whether the user has the given connection
-      this.requirements.forEach(requirement => {
-        var userHasConnection = user.connections.filter(connection => {
-          return connection.provider === requirement.provider;
-        }).length;
-
-        if (userHasConnection) {
-
-        }
-        */
   }
 
   addAppToUsersFavorites() {
@@ -84,21 +67,6 @@ export class AppDetailsComponent {
   viewEditOwnedApp() {
     this.$state.go('editOwnedApp', {app: this.app})
   }
-
-/*
-  // Gets the names of all the third party api's required for this app
-  populateAppRequirements() {
-    this.app.thirdPartyApiRequirements.forEach(requirement => {
-      if (requirement.required === true) {
-        console.log(requirement)
-        this.requirements.push(requirement.label);
-      }
-    });
-    console.log(this.requirements);
-    return ['one', 'two', 'three', 'four'];//this.requirements;
-  }
-  */
-
 
 }
 

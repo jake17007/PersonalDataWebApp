@@ -7,6 +7,7 @@ import * as auth from '../../auth/auth.service';
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/forAppStorePage/all', controller.indexForAppStorePage);
 router.get('/:id', controller.show);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', controller.upsert);

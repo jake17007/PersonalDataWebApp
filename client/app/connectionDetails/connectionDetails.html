@@ -1,1 +1,22 @@
-<div>This is the connectionDetails view.</div>
+<div class="container">
+
+    <div class="col-md-8 col-md-offset-2">
+
+      <h1 class="page-header">
+        {{connectionDetailsCtrl.thirdPartyApi.label}}
+      </h1>
+
+      <h3>
+        {{connectionDetailsCtrl.thirdPartyApi.label}} is<span ng-hide="connectionDetailsCtrl.userConnectionEstablished"> NOT</span> connected.
+      </h3>
+
+      <div ng-show="connectionDetailsCtrl.userConnectionEstablished">
+        <button type="button" uib-tooltip="Remove connection" tooltip-placement="bottom" ng-click="connectionDetailsCtrl.removeConnection()" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+        <button type="button" disabled class="btn btn-success" ng-click="connectCtrl.connectAcct(thirdPartyApi.provider)"><i class="glyphicon glyphicon-ok"></i> Connected</button>
+      </div>
+      <div ng-hide="connectionDetailsCtrl.userConnectionEstablished">
+        <button type="button" ng-click="connectionDetailsCtrl.connect()" class="btn btn-primary">Connect</button>
+      </div>
+
+
+</div>

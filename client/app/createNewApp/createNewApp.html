@@ -1,185 +1,73 @@
 <div class="container">
 
-  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+  <div class="col-sm-12 col-md-8 col-md-offset-2">
+
     <h1 class="page-header">
       Create a New App
-      <a type="button" class="btn btn-default pull-right" ui-sref="developerGuide">
-        Help
-      </a>
     </h1>
+
     <div class="row">
-      <div class="col-xs-12"
-        <form>
-
-          <div class="form-group">
-            <label for="appname">App Name</label>
-            <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="createNewAppCtrl.newApp.name">
-          </div>
-
-          <div class="form-group">
-            <label for="githublink">Link to Github Repository</label>
-            <input type="text" class="form-control" id="githublink" placeholder='Example: "https://github.com/username/repo.git"' ng-model="createNewAppCtrl.newApp.githubLink"/>
-          </div>
-
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea type="text" class="form-control" id="description" ng-model="createNewAppCtrl.newApp.description" placeholder='Example: "Shows correlations between how often you work out and how often you get dates."'></textarea>
-          </div>
-
-
-
-<!--
-          <h4 class="page-header"> Connection Data Requirements </h4>
-          <div class="form-group">
-
-            <div ng-repeat="api in createNewAppCtrl.thirdPartyApis | orderBy:'label'">
-              <div class="row">
-                <div class="col-xs-4">
-                  <input type="checkbox" class="pull-right" id="{{api.label}}" ng-model="api.required" />
-                  <label for="{{api.label}}" class="pull-left">{{api.label}}</label>
-                </div>
-                <div ng-repeat="endpoint in api.endpoints">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <input type="checkbox" class="pull-right" id="{{endpoint.label}}" ng-model="endpoint.required" />
-                      <label for="{{endpoint.label}}" class="pull-left">{{endpoint.label}}</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
--->
-<!--
-          <h4 class="page-header"> Connection Data Requirements </h4>
-          <div class="form-group">
-
-            <div ng-repeat="api in createNewAppCtrl.thirdPartyApis | orderBy:'label'">
-              <div class="row">
-                <div class="col-xs-4">
-                  <input type="checkbox" class="pull-right" id="{{api.label}}" ng-model="api.required" />
-                  <label for="{{api.label}}" class="pull-left">{{api.label}}</label>
-                </div>
-                <div ng-repeat="endpoint in api.endpoints">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <input type="checkbox" class="pull-right" id="{{endpoint.label}}" ng-model="endpoint.required" />
-                      <label for="{{endpoint.label}}" class="pull-left">{{endpoint.label}}</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="test-class">some text</div>
--->
-
-<!-- NEW -->
-
-          <div class="col-md-10 col-md-offset-1">
-            <h4 class="page-header"> Connection Data Requirements </h4>
+      <div class="col-xs-12">
+        <form class="panel panel-default">
+          <div class="panel-body">
             <div class="form-group">
+              <label for="appname">App Name</label>
+              <input type="text" id="appname" class="form-control" placeholder='Example:  "Correlation Corroboration"' ng-model="createNewAppCtrl.newApp.name">
+            </div>
 
-              <div class="list-group list-group-root well">
+            <div class="form-group">
+              <label for="githublink">Link to Github Repository</label>
+              <input type="text" class="form-control" id="githublink" placeholder='Example: "https://github.com/username/repo.git"' ng-model="createNewAppCtrl.newApp.githubLink"/>
+            </div>
 
-                <div ng-repeat="api in createNewAppCtrl.thirdPartyApis | orderBy:'label'">
-                  <div class="list-group-item">
-                    <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="createNewAppCtrl.toggleDropdown(api)"></a>{{api.label}}
-                    <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="createNewAppCtrl.checkOrUncheckChildren(api)"/>
-                  </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea type="text" class="form-control" id="description" ng-model="createNewAppCtrl.newApp.description" placeholder='Example: "Shows correlations between how often you work out and how often you get dates."'></textarea>
+            </div>
 
-                  <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
-                    <div ng-repeat="endpoint in api.endpoints">
-                      <div class="list-group-item left-padding">
-                        <a href="{{endpoint.documentationLink}}" target="_blank">
-                          {{endpoint.label}}
-                        </a>
-                        <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="createNewAppCtrl.checkOrUncheckParent(api)"/>
+            <div class="col-md-10 col-md-offset-1">
+              <h4 class="page-header"> Connection Data Requirements </h4>
+              <div class="form-group">
+
+                <div class="list-group list-group-root well">
+
+                  <div ng-repeat="api in createNewAppCtrl.thirdPartyApis | orderBy:'label'">
+                    <div class="list-group-item">
+                      <a href="" ng-class="{'glyphicon': true, 'glyphicon-chevron-right': api.collapsed, 'glyphicon-chevron-down': !api.collapsed}" ng-click="createNewAppCtrl.toggleDropdown(api)"></a>{{api.label}}
+                      <input type="checkbox" class="pull-right" ng-model="api.required" ng-click="createNewAppCtrl.checkOrUncheckChildren(api)"/>
+                    </div>
+
+                    <div ng-class="{'list-group': true, 'collapse': api.collapsed}" data-toggle="collapse">
+                      <div ng-repeat="endpoint in api.endpoints">
+                        <div class="list-group-item left-padding">
+                          <a href="{{endpoint.documentationLink}}" target="_blank">
+                            {{endpoint.label}}
+                          </a>
+                          <input type="checkbox" class="pull-right" ng-model="endpoint.required" ng-click="createNewAppCtrl.checkOrUncheckParent(api)"/>
+                        </div>
                       </div>
                     </div>
+
                   </div>
-
                 </div>
+
               </div>
-
             </div>
+
           </div>
-
-
-<!--
-
-                <a href="#item-1-1" class="list-group-item" data-toggle="collapse">
-                  <i class="glyphicon glyphicon-chevron-right"></i>Item 1.1
-                </a>
-                <div class="list-group collapse" id="item-1-1">
-                  <a href="#" class="list-group-item">Item 1.1.1</a>
-                  <a href="#" class="list-group-item">Item 1.1.2</a>
-                  <a href="#" class="list-group-item">Item 1.1.3</a>
-                </div>
-
-                <a href="#item-1-2" class="list-group-item" data-toggle="collapse">
-                  <i class="glyphicon glyphicon-chevron-right"></i>Item 1.2
-                </a>
-                <div class="list-group collapse" id="item-1-2">
-                  <a href="#" class="list-group-item">Item 1.2.1</a>
-                  <a href="#" class="list-group-item">Item 1.2.2</a>
-                  <a href="#" class="list-group-item">Item 1.2.3</a>
-                </div>
-
-                <a href="#item-1-3" class="list-group-item" data-toggle="collapse">
-                  <i class="glyphicon glyphicon-chevron-right"></i>Item 1.3
-                </a>
-                <div class="list-group collapse" id="item-1-3">
-                  <a href="#" class="list-group-item">Item 1.3.1</a>
-                  <a href="#" class="list-group-item">Item 1.3.2</a>
-                  <a href="#" class="list-group-item">Item 1.3.3</a>
-                </div>
--->
-
-
-
-
-
-          <div class="form-group row pull-right">
-            <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
-            <button class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
-          </div>
-
-
         </form>
+
+        <div class="pull-left">
+          <a href="#" class="btn btn-default" ui-sref="developers">Cancel</a>
+        </div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" ui-sref="developerGuide"><i class="glyphicon glyphicon-question-sign"></i>&nbsp&nbsp
+            Help
+          </button>
+          <button class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
+        </div>
 
       </div>
     </div>
   </div>
 </div>
-
-<!--
-<div class="container">
-
-  <h1 class="page-header">Create Your New App</h1>
-  <div class="row">
-    <div class="col-xs-12"
-      <form>
-        <div class="form-group">
-          <label>App Name</label>
-          <input type="text" class="form-control" placeholder="App Name" ng-model="createNewAppCtrl.newAppName">
-          <label>GithubLink</label>
-          <input type="text" class="form-control" placeholder="Github Link" ng-model="createNewAppCtrl.newAppGithubLink">
-
-          <div ng-repeat="api in createNewAppCtrl.thirdPartyApis">
-              <input type="checkbox" ng-model="api.required" />
-              <label>{{api.label}}</label>
-          </div>
-
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" ng-click="createNewAppCtrl.createNewAppSubmit()">Submit</button>
-          </span>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
--->

@@ -10,7 +10,7 @@ function getEndpointDataGetters(connectInfo, endpoints) {
   var dataGetters = [];
   endpoints.forEach(endpointInfo => {
 
-    var date = '2017-02-01'; // Temporary, implement current date later
+    var date = new Date().toISOString().split('T')[0];
     var period = '1m'; // Temporary, can implement options someday
 
     var endpoint;

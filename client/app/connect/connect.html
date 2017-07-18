@@ -1,109 +1,24 @@
-<script src='https://connect.humanapi.co/connect.js'></script>
-
 <div class="container">
   <div class="col-md-6 col-md-offset-3">
 
     <h1 class="page-header">Connections</h1>
+    <ul class="list-group">
+      <li class="list-group-item clearfix" ng-repeat="thirdPartyApi in connectCtrl.thirdPartyApis">
+        <div class="col-xs-6">
+          <h4><a ng-click="connectCtrl.viewConnectionDetails(thirdPartyApi)">{{thirdPartyApi.label}}</a></h4>
+        </div>
+        <div class="pull-right">
+          <div ng-hide="thirdPartyApi.userConnectionEstablished">
+            <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct(thirdPartyApi.provider)">Connect</button>
+          </div>
+          <div ng-show="thirdPartyApi.userConnectionEstablished">
+            <button type="button" disabled class="btn btn-success" ng-click="connectCtrl.connectAcct(thirdPartyApi.provider)"><i class="glyphicon glyphicon-ok"></i>Connected</button>
+          </div>
+        </div>
 
-    <ul class="list-group" ng-repeat="thirdPartyApi in connectCtrl.thirdPartyApis">
-      <li class="list-group-item clearfix">
-          {{thirdPartyApi.label}}
-          <button type="button" class="btn btn-primary pull-right" ng-click="connectCtrl.connectAcct(thirdPartyApi.provider)">Connect</button>
       </li>
     </ul>
 
-    <!--
-    <img role="button" id='connect-health-data-btn' ng-click="connectCtrl.openHumanApiConnect()" src='https://connect.humanapi.co/assets/button/blue.png'/>
 
-
-    <img role="button" id='connect-health-data-btn' ng-click="connectCtrl.testHumanApiConnect()" src='https://connect.humanapi.co/assets/button/blue.png'/>
-
-    <button ng-click="connectCtrl.postSessionTokenObject()">Post</button>
-    -->
   </div>
 </div>
-
-  <!-- old -->
-  <!--
-  <div class="row">
-    <div class="list-group col-md-6 col-md-offset-3">
-      <div class="row list-group-item">
-        <div class="col-md-9">
-          Facebook
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-secondary">Connect</button>
-        </div>
-      </div>
-      <div class="row list-group-item">
-        <div class="col-md-9">
-          Fitbit
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('fitbit')">Connect</button>
-        </div>
-      </div>
-      <div class="row list-group-item">
-        <div class="col-md-9">
-          Moves
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
-        </div>
-      </div>
-    -->
-      <!--
-
-      <li class="list-group-item">
-        Moves
-        <button type="button" class="btn btn-primary" ng-click="connectCtrl.connectAcct('moves')">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Apple Health
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Automatic
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Eventbrite
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Foursquare
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Google Calendar
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Google Plus
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Instagram
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Jawbone
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        YouTube
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Twitter
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        Uber
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-      <li class="list-group-item">
-        RescueTime
-        <button type="button" class="btn btn-secondary">Connect</button>
-      </li>
-    -->
