@@ -17,6 +17,7 @@ import {aggregateDataGetters, handleExpiredTokenErrorResponses} from './getThird
 import {upsertConnection} from '../../auth/connect/connect.service';
 import {buildApp} from './buildApp/buildApp';
 import {getThirdPartyData} from './getThirdPartyData/getThirdPartyData';
+import {getNewNodegitVersion} from './versioning'
 
 var PythonShell = require('python-shell');
 var fs = require('fs');
@@ -171,14 +172,15 @@ function getUserData(appAndUserData) {
 */
 // userData = [ {<provider_name>: [<objects>]},
 //              {<provider_name>: [<objects>]}, ...]
-function runAppForOutput(userData) {
+function runAppForOutput(nodegitDirName, userData) {
   return new Promise(function(resolve, reject) {
     //console.log('userData: ', userData);
     //var data = userData; // Just get the user object
 
     /**** CALLING PYTHON ****/
     var options = {mode: 'json'};
-    var pyshell = new PythonShell('nodegit/app.py', options);
+    var runFileName = nodegitDirName + '/app.py';
+    var pyshell = new PythonShell(runFileName, options);
 
     pyshell.send(userData);
 
@@ -198,16 +200,16 @@ function runAppForOutput(userData) {
   });
 }
 
-function handleTempFile() {
+function handleTempFile(nodegitDirName) {
   return function(result) {
-
+    console.log('nodegitDirName: ', nodegitDirName);
     // Delete the temporary directory for the app if it exists
-    if (fs.existsSync('nodegit')) {
-      rimraf('nodegit', function() {
-        console.log('Temporary git repo deleted.');
+    if (fs.existsSync(nodegitDirName)) {
+      rimraf(nodegitDirName, function() {
+        console.log('Temporary git repo ' + nodegitDirName + ' deleted.');
       });
     } else {
-      console.log('Temporary git repo does not exist');
+      console.log('Temporary git repo ' + nodegitDirName + ' does not exist');
     }
     return result;
   }
@@ -296,6 +298,13 @@ export function destroy(req, res) {
  * OUTPUT: Promise
  */
 export function runApp(req, res) {
+  try {
+    // First check to see if nodegit exists, and get the next version number if so
+    var nodegitDirName = getNewNodegitVersion();
+  } catch(err) {
+    console.log(err);
+    return(handleError(res));
+  }
   return Promise.all([
     Analysis.findById(req.params.appId)
     .populate('thirdPartyApiRequirements.thirdPartyApi')
@@ -312,24 +321,21 @@ export function runApp(req, res) {
   })
   .then(appAndUserData => {
     return Promise.all([
-      buildApp(appAndUserData),
+      buildApp(nodegitDirName, appAndUserData),
       getThirdPartyData(appAndUserData)
     ]);
   })
   .then(result => {
-    //console.log('result[1][0].fitbit: ', result[1][0].fitbit);
-    //console.log('result[1][1].moves: ', result[1][1].moves);
-    return runAppForOutput(result[1]);
-    //return {html: '<div>heres some html from the server</div>'}
+    return runAppForOutput(nodegitDirName, result[1]);
   })
   .then(res => {
     //console.log('Heres your current results: ', res);
     return res;
   })
-  .then(handleTempFile())
+  .then(handleTempFile(nodegitDirName))
   .then(respondWithResult(res))
   .catch(handleError(res))
-  .then(handleTempFile())
+  .then(handleTempFile(nodegitDirName))
   .catch(err => {
     console.log('An error in deleting the temp file occured: ', err);
   });
@@ -375,26 +381,7 @@ export function viewJson(req, res) {
   .then(respondWithResult(res))
   .catch(handleError(res));
 }
-/*
-export function viewJson(req, res) {
-  return User.findById(req.user._id).exec()
-  .then(user => {
-      return [req.body, user];
-  })
-  .then(getProviderAccessInfo())
-  .then(handleConnectionNotFound(res))
-  .then((appAndUserData) => {
-    return Promise.all([
-      //getUserData(appAndUserData)
-    ]);
-  })
-  .then(result => {
-    return result[0];
-  })
-  .then(respondWithResult(res))
-  .catch(handleError(res));
-}
-*/
+
 function getHtmlFromFile() {
   return new Promise(function(resolve, reject) {
     fs.readFile('server/api/analysis/view.html', 'utf8', (err, theHtml) => {
