@@ -147,29 +147,8 @@ function handleExpiredTokens(appAndUserData) {
     });
   }
 }
-/*
-function getUserData(appAndUserData) {
-  return new Promise(function(resolve, reject) {
-    // aggregate the functions needed to retrieve the data from their respective providers' apis
-    aggregateDataGetters(appAndUserData.app, function(err, dataGetters) {
-      if (err) {
-        console.log(err);
-        reject(err);
-      }
-      // Get all the data
-      Promise.all(dataGetters.map(callback => callback(appAndUserData.userRequiredApiInfo, appAndUserData.user)))
-      .then(handleExpiredTokens(appAndUserData))
-      .then(result => {
-        resolve(result);
-      })
-      .catch(err => {
-        reject(err);
-      });
-    });
 
-  });
-}
-*/
+// Passes the data through the app (in nodegit-*) and returns some HTML/CSS/JavaScript
 // userData = [ {<provider_name>: [<objects>]},
 //              {<provider_name>: [<objects>]}, ...]
 function runAppForOutput(nodegitDirName, userData) {
@@ -200,6 +179,7 @@ function runAppForOutput(nodegitDirName, userData) {
   });
 }
 
+// Deletes the temporary nodegit-* directory (i.e. the app)
 function handleTempFile(nodegitDirName) {
   return function(result) {
     console.log('nodegitDirName: ', nodegitDirName);
@@ -222,6 +202,7 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
+// Get a list of Analyises with thirdPartyApis populated
 export function indexForAppStorePage(req, res) {
   return Analysis.find()
   .populate('thirdPartyApiRequirements.thirdPartyApi')
@@ -253,6 +234,7 @@ export function create(req, res) {
     .catch(handleError(res));
 }
 
+// For debugging
 function seeWhatsHapping() {
   return function(result) {
     console.log('heres whats happing: ', result);
@@ -305,6 +287,7 @@ export function runApp(req, res) {
     console.log(err);
     return(handleError(res));
   }
+  // Get the Analysis and the User from the DB
   return Promise.all([
     Analysis.findById(req.params.appId)
     .populate('thirdPartyApiRequirements.thirdPartyApi')
@@ -312,30 +295,31 @@ export function runApp(req, res) {
     .exec(),
     User.findById(req.user._id).exec()
   ])
+  // Format for easier usability
   .then(result => {
-    var appAndUserData = {
+    return {
       app: result[0],
       user: result[1]
     };
-    return appAndUserData;
   })
+  // Retrieve the app from Github and the user's data from third party APIs
   .then(appAndUserData => {
     return Promise.all([
       buildApp(nodegitDirName, appAndUserData),
       getThirdPartyData(appAndUserData)
     ]);
   })
+  // Pass the user's data through the app
   .then(result => {
     return runAppForOutput(nodegitDirName, result[1]);
   })
-  .then(res => {
-    //console.log('Heres your current results: ', res);
-    return res;
-  })
-  .then(handleTempFile(nodegitDirName))
+  // Send the response to the client
   .then(respondWithResult(res))
+  // OR send an error to the client
   .catch(handleError(res))
+  // Delete the temporary directory holding the app
   .then(handleTempFile(nodegitDirName))
+  // For debugging
   .catch(err => {
     console.log('An error in deleting the temp file occured: ', err);
   });
@@ -359,29 +343,36 @@ export function getMyFavoriteApps(req, res) {
     .catch(handleError(res));
 }
 
+// Get the user's data per the connection requirements
 export function viewJson(req, res) {
+  // Get the user from the DB
   return Promise.all([
     User.findById(req.user._id).exec()
   ])
+  // Format for easier usability
   .then(user => {
-    var appAndUserData = {
+    return {
       app: req.body,
       user: user[0]
     };
-    return appAndUserData;
   })
+  // Get the data
   .then(appAndUserData => {
     return Promise.all([
       getThirdPartyData(appAndUserData)
     ]);
   })
+  // Get rid of the array
   .then(result => {
     return result[0];
   })
+  // Respond with the result
   .then(respondWithResult(res))
+  // Or respond with the error
   .catch(handleError(res));
 }
 
+// Helper function: gets the html from the app output
 function getHtmlFromFile() {
   return new Promise(function(resolve, reject) {
     fs.readFile('server/api/analysis/view.html', 'utf8', (err, theHtml) => {
@@ -393,6 +384,7 @@ function getHtmlFromFile() {
   })
 }
 
+// For debugging
 export function tempTestHtml(req, res) {
   return getHtmlFromFile()
   .then(result => {
