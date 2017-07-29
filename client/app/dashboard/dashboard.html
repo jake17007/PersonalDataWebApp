@@ -14,17 +14,22 @@
         </h3>
 
 
+        <div class="panel panel-default clearfix dashboard-panels">
+          <div class="col-xs-12">
+            <ul class="list-group" ng-repeat="app in dashboardCtrl.favoriteApps">
+              <li class="list-group-item">
+                <a href="#" ng-click="dashboardCtrl.viewUserAppView(app._id, app.name)">
+                  {{app.name}}
+                </a>
+                <button type="button" class="close" ng-click="dashboardCtrl.removeFromFavorites(app)" uib-tooltip="Remove from favorites" tooltip-placement="top-right">
+                  &times;
+                </button>
+              </li>
+            </ul>
+          </div>
 
-        <ul class="list-group" ng-repeat="app in dashboardCtrl.favoriteApps">
-          <li class="list-group-item">
-            <a href="#" ng-click="dashboardCtrl.viewUserAppView(app._id, app.name)">
-              {{app.name}}
-            </a>
-            <button type="button" class="close" ng-click="dashboardCtrl.removeFromFavorites(app)" uib-tooltip="Remove from favorites" tooltip-placement="top-right">
-              &times;
-            </button>
-          </li>
-        </ul>
+        </div>
+
 
     </div>
   </div>
@@ -40,9 +45,14 @@
           </a>
         </h3>
 
-        <ul class="list-group" ng-repeat="connection in dashboardCtrl.myConnections">
-          <li class="list-group-item">{{connection.label}}</li>
-        </ul>
+        <div class="panel panel-default clearfix dashboard-panels">
+          <div class="col-xs-12">
+            <ul class="list-group" ng-repeat="connection in dashboardCtrl.myConnections">
+              <li class="list-group-item">{{connection.label}}</li>
+            </ul>
+          </div>
+        </div>
+
 
     </div>
   </div>
