@@ -32,6 +32,7 @@ import EditOwnedAppComponent from './editOwnedApp/editOwnedApp.component';
 import JsonViewComponent from './jsonView/jsonView.component';
 import DeveloperGuideComponent from './developerGuide/developerGuide.component';
 import ConnectionDetailsComponent from './connectionDetails/connectionDetails.component';
+import GettingStartedComponent from './gettingStarted/gettingStarted.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -45,7 +46,7 @@ import modal from '../components/modal/modal.service';
 import './app.scss';
 
 angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, AppDetailsComponent, DeveloperGuideComponent, ConnectionDetailsComponent, navbar, footer, main, constants, socket, util, ngclipboard, refreshStore, modal
+  uiBootstrap, _Auth, account, admin, DashboardComponent, ConnectComponent, DevelopersComponent, CreateNewAppComponent, AppStoreComponent, UserAppViewComponent, EditOwnedAppComponent, JsonViewComponent, AppDetailsComponent, DeveloperGuideComponent, ConnectionDetailsComponent, GettingStartedComponent, navbar, footer, main, constants, socket, util, ngclipboard, refreshStore, modal
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
@@ -58,6 +59,7 @@ angular.module('hh7App', [ngCookies, ngResource, ngSanitize, 'btford.socket-io',
           $location.path('/login');
         }
       });
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
   });
 

@@ -16,6 +16,9 @@
 
         <div class="panel panel-default clearfix dashboard-panels">
           <div class="col-xs-12">
+            <div class="nothing-added-text" ng-hide="dashboardCtrl.favoriteApps.length">
+              It looks like you haven't Favorited any apps. Click the "More Apps" button to start using apps. Or <a href="#" ui-sref="gettingStarted">click here for help getting started</a>.
+            </div>
             <ul class="list-group" ng-repeat="app in dashboardCtrl.favoriteApps">
               <li class="list-group-item">
                 <a href="#" ng-click="dashboardCtrl.viewUserAppView(app._id, app.name)">
@@ -47,6 +50,9 @@
 
         <div class="panel panel-default clearfix dashboard-panels">
           <div class="col-xs-12">
+            <div class="nothing-added-text" ng-hide="dashboardCtrl.myConnections.length">
+              It looks like you haven't established any Connections. Click the "All Connections" button to connect some data sources. Or <a href="#" ui-sref="gettingStarted">click here for help getting started</a>.
+            </div>
             <ul class="list-group" ng-repeat="connection in dashboardCtrl.myConnections">
               <li class="list-group-item">{{connection.label}}</li>
             </ul>
