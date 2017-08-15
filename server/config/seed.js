@@ -536,3 +536,48 @@ ThirdPartyApi.create({
   throw(err);
 })
 */
+/*
+Endpoint.create({
+  name: 'channelStatistics',
+  label: 'Channel Statistics',
+  documentationLink: 'https://developers.google.com/youtube/v3/docs/channels/list',
+  requiredScopes: [
+
+  ],
+  description: ''
+})
+.then(console.log)
+.catch(console.log)
+*/
+/*
+ThirdPartyApi.find({'_id': '596644837344833ea82bfa36'})
+  .then(thirdPartyApi => {
+    return Endpoint.create({
+      name: 'channelStatistics',
+      label: 'Channel Statistics',
+      documentationLink: 'https://developers.google.com/youtube/v3/docs/channels/list',
+      requiredScopes: [
+
+      ],
+      description: ''
+    })
+    .then(endpoint => {
+      thirdPartyApi.endpoints.push(endpoint._id);
+      thirdPartyApi.save()
+        .then(savedThirdPartyApi => {
+          console.log(JSON.stringify(savedThirdPartyApi, null, 2));
+        });
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
+*/
+/*
+ThirdPartyApi.findById('596644837344833ea82bfa36')
+.then(thirdPartyApi => {
+  thirdPartyApi.endpoints.push('59934771e2c3572817963341')
+  thirdPartyApi.save();
+})
+.catch(console.log);
+*/
