@@ -1,4 +1,10 @@
-# hh7
+# TLDR
+
+A platform for personal data anlaytics
+- Users can connect and join their personal data sources (e.g. Fitbit, YouTube, etc.) and use analytics apps to get insight about their lives
+- Developers can create and upload those analytics apps without ever having access to the users' data (they create the analytics apps based on the schema of the data)
+
+# Connectrix AKA Habits Helper V7
 
 This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 4.1.1.
 
